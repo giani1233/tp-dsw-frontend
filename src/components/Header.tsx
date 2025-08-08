@@ -1,9 +1,13 @@
-const Header = () => {
-  return (
-    <header>
-      <h1>Bienvenido a mi aplicación</h1>
-    </header>
-  );
-};
+import './header.css'
 
-export default Header;
+function Header() {
+    return (
+        <>
+            <div className='Header'>
+                <h1>Esto es el Header!</h1>
+            </div>
+        </>
+    )
+}
+
+export default Header
