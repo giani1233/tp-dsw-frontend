@@ -1,48 +1,175 @@
 .Header {
     font-size: 10px;
     font-family: 'Courier New', Courier, monospace;
-    background-color: #7ce9da;
-    padding: 5px;
+    background-color: #8ae7db;
+    padding: 6px;
     border: 2.5px solid #000;
     text-align: center;
-}
-
-.navigation ul {
-    font-size: 5px;
-    margin: 0;
-    list-style-position: inside;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
 }
 
 .navigation {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 
-.navigation, .navigation, .navigation ul {
+.navigation .menu-icon {
+  font-size: 14px;
+  width: 80px;
+  margin: 5px auto;
+  transition: all 0.25s linear;
+  border-radius: 7px;
+  border: 2px solid #000;
+  background-color: rgb(220, 237, 240);
+  display: none; /* Ocultar por defecto */
+}
+
+.navigation .menu-icon:hover {
+  background: rgb(144, 177, 214);
+}
+
+.navigation ul {
+    font-size: 5px;
+    margin: 0 20px;
+    gap: 5px;
+}
+
+.navigation, .navigation ul {
   flex: 1;
   display: flex;
   align-items: center;
   height: 100%;
-  padding: 0 4em;
+  padding: 0 3em;
 }
 
-.navigation li {
-  display: inline;
-  text-align: center;
-  flex: 1;
-}
-
-.navigation a {
+.navigation ul li {
   display: inline-block;
-  font-size: 20px;
+}
+
+.navigation ul li a {
+  display: block;
+  font-size: 17px;
   text-transform: uppercase;
   text-decoration: none;
   color: black;
+  padding: 2px 16px;
+  transition: all 0.25s linear;
+  border-radius: 7px;
+  border: 2px solid #000;
+  background-color: rgb(220, 237, 240);
+  white-space: nowrap; /* <-- Evita el salto de línea */
+}
+
+.navigation ul li a:hover {
+  background: rgb(144, 177, 214);
 }
 
 .navigation form {
   display: flex;
   align-items: stretch;
   height: 30px;
+}
+
+.navigation form input[type="search"] {
+  font-size: 14px;
+  padding: 0 8px;
+  border: 2px solid #000;
+  border-right: none;
+  border-radius: 5px 0 0 5px;
+}
+
+.navigation form input[type="submit"] {
+  font-size: 14px;
+  border: 2px solid #000;
+  border-left: none;
+  border-radius: 0 5px 5px 0;
+  background-color: rgb(197, 207, 209);
+  cursor: pointer;
+  padding: 0 8px;
+}
+
+.navigation form input[type="submit"]:hover {
+  background-color: rgb(144, 177, 214);
+  transition: all 0.25s linear;
+}
+
+/* Diseño responsivo para pantallas medianas */
+@media (max-width: 990px) {
+  .Header {
+    font-size: 8px;
+    padding: 3px;
+  }
+  .navigation {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0 1em;
+  }
+  .navigation .logo { /* Achica el area de interaccion del logo */
+    display: inline-block;
+    margin: 0 auto;
+    width: auto;
+    text-align: center;
+  }
+  .navigation .logo img {
+    width: 32px;
+    height: auto;
+  }
+  .navigation ul {
+    gap: 2px;
+    padding: 0;
+    margin: 0;
+    font-size: 3px;
+    flex-wrap: wrap;
+    justify-content: center;
+    display: flex;
+  }
+  .navigation ul.show {
+    gap: 2px;
+    padding: 0;
+    margin: 0;
+    font-size: 3px;
+    flex-wrap: wrap;
+    justify-content: center;
+    display: flex;
+  }
+  .navigation ul li a {
+    font-size: 12px;
+    padding: 2px 8px;
+  }
+  .navigation form {
+    margin-top: 5px;
+    margin-bottom: 2px;
+    height: 25px;
+    justify-content: center;
+    width: 100%;
+    display: flex;
+  }
+}
+
+/* Diseño responsivo para pantallas pequeñas (prototipo) */
+@media (max-width: 420px) {
+  .navigation .menu-icon {
+    display: block;
+    cursor: pointer;
+  }
+  .navigation ul {
+    margin-bottom: 5px;
+    flex-wrap: wrap;
+    justify-content: center;
+    display: none; /* Oculto por defecto */
+  }
+  .navigation ul.show {
+    flex-wrap: wrap;
+    justify-content: center;
+    display: block; /* Visible con show */
+  }
+  .navigation ul li {
+    margin-bottom: 3px;
+  }
 }

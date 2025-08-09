@@ -7,7 +7,17 @@ function Home() {
         <>
         <Header />
             <div className='Home'>
-                <h1>Welcome to the App</h1>
+                <h1><u>Welcome to the App</u></h1>
+                <p>Spacing</p><br/>
+                <p>Spacing</p><br/>
+                <p>Spacing</p><br/>
+                <p>Spacing</p><br/>
+                <p>Spacing</p><br/>
+                <p>Spacing</p><br/>
+                <p>Spacing</p><br/>
+                <p>Spacing</p><br/>
+                <p>Spacing</p><br/>
+                <p>Spacing</p><br/>
             </div>
         <Footer />
         </>
