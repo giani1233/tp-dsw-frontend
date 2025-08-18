@@ -66,7 +66,27 @@
   white-space: nowrap; /* <-- Evita el salto de línea */
 }
 
-.navigation ul li a:hover {
+.navigation ul li select {
+  font-family: 'Courier New', Courier, monospace;
+  text-align: center;
+  display: block;
+  font-size: 17px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: black;
+  padding: 2px 16px;
+  transition: all 0.25s linear;
+  border-radius: 7px;
+  border: 2px solid #000;
+  background-color: rgb(220, 237, 240);
+  white-space: nowrap; /* <-- Evita el salto de línea */
+}
+
+option {
+  text-align: justify;
+}
+
+.navigation ul li a:hover, .navigation ul li select:hover {
   background: rgb(144, 177, 214);
 }
 
@@ -100,7 +120,7 @@
 }
 
 /* Diseño responsivo para pantallas medianas */
-@media (max-width: 990px) {
+@media (max-width: 1060px) {
   .Header {
     font-size: 8px;
     padding: 3px;
@@ -138,7 +158,7 @@
     justify-content: center;
     display: flex;
   }
-  .navigation ul li a {
+  .navigation ul li a, .navigation ul li select  {
     font-size: 12px;
     padding: 2px 8px;
   }
