@@ -17,10 +17,10 @@ function Header() {
                     <ul className={menuVisible ? 'show' : ''}>
                         <li><a href="#">Ciudad</a></li>
                         <li><a href="#">Categorías</a></li>
-                        <li><a href="#">Iniciar Sesión</a></li>
+                        <li><a href="/login">Iniciar Sesión</a></li>
                         <li><a href="#">Registrarse</a></li>
                     </ul>
-                    <form> {/* Sin funcionalidad */}
+                    <form> 
                         <input type="search" name="query" placeholder="Buscar"/>
                         <input type="submit" value="Ir"/>
                     </form>
