@@ -67,3 +67,4 @@ export default tseslint.config([
   },
 ])
 ```
+// Para iniciar el servidor es: pnpm dev //

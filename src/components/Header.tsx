@@ -24,7 +24,7 @@ function Header() {
                                 <option value="city4">Rosario</option>
                                 <option value="city5">San Juan</option>
                                 <option value="city6">Santa Fe</option>
-                            </select></li> {/* Menu Dropdown */}
+                            </select></li>
                         <li>
                             <select>
                                 <option value="noCategory">Categorías</option>
@@ -34,7 +34,7 @@ function Header() {
                                 <option value="cat4">Categoría 4</option>
                                 <option value="cat5">Categoría 5</option>
                                 <option value="cat6">Categoría 6</option>
-                            </select></li> {/* Menu Dropdown */}
+                            </select></li>
                         <li><a href="/login">Iniciar Sesión</a></li>
                         <li><a href="/register">Registrarse</a></li>
                     </ul>

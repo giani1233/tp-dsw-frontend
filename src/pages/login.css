@@ -1,0 +1,10 @@
+h1 {
+    text-align: center;
+}
+
+.login-form {
+    align-items: center;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
