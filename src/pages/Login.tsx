@@ -7,17 +7,28 @@ function Login() {
     return (
         <>
             <Header />
-                <h1>LOGIN</h1>
 
-                <form className="login-form">
-                    <label htmlFor="email">Email: </label>
-                    <input type="email" id="email" name="email" required /><br/>
+            <div className="login-container">
+                <div className="login-form">
+                    <h1>Iniciar sesión</h1>
+                    <form action="#" method="post">
+                        <div className="input-group">
+                            <label htmlFor="dni">Documento</label>
+                            <input type="text" id="dni" name="dni" required />
+                        </div>
+                        <div className="input-group">
+                            <label htmlFor="password">Contraseña</label>
+                            <input type="password" id="password" name="password" required />
+                        </div>
 
-                    <label htmlFor="contraseña">Contraseña: </label>
-                    <input type="password" id="contraseña" name="contraseña" required /><br/>
+                        <button type="submit" className="btn-login">Acceder</button>
 
-                    <button type="submit">Login</button>
-                </form>
+                        <div className="forgot-password">
+                            <a href="#">¿Olvidaste tu contraseña?</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
             <Footer />
         </>
