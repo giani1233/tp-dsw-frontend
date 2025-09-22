@@ -68,3 +68,10 @@ export default tseslint.config([
 ])
 ```
 // Para iniciar el servidor es: pnpm dev //
+// Para subir cambios a github usar los comandos:
+   git add .
+
+   git commit -m 'message'
+
+   git push
+//
