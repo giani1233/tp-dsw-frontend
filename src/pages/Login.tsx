@@ -2,13 +2,13 @@ import './login.css'
 import Header from "../components/Header"
 import Footer from "../components/Footer"
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 function Login() {
     const [documento, setDocumento] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
 
-    // Lógica de inicio de sesión
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
@@ -29,7 +29,6 @@ function Login() {
         }
     }
 
-    // Html del formulario de inicio de sesión
     return (
         <>
             <Header />
@@ -40,11 +39,11 @@ function Login() {
                     <form onSubmit={handleLogin}>
                         <div className="input-group">
                             <label htmlFor="dni">Documento</label>
-                            <input onChange={(event) => setDocumento(event.target.value)} type="text" id="dni" name="dni" minLength={8} maxLength={8} required />
+                            <input onChange={(event) => setDocumento(event.target.value)} type="text" className="input" name="dni" minLength={8} maxLength={8} required />
                         </div>
                         <div className="input-group">
                             <label htmlFor="password">Contraseña</label>
-                            <input onChange={(event) => setPassword(event.target.value)} type="password" id="password" name="password" minLength={8} maxLength={20} required />
+                            <input onChange={(event) => setPassword(event.target.value)} type="password" className="input" name="password" minLength={8} maxLength={20} required />
                         </div>
 
                         {error && <div className="error-message">{error}</div>}
@@ -52,7 +51,16 @@ function Login() {
                         <button type="submit" className="btn-login">Acceder</button>
 
                         <div className="forgot-password">
-                            <a href="#">¿Olvidaste tu contraseña?</a>
+                            <Link to="#">¿Olvidaste tu contraseña?</Link>
+                        </div>
+
+                        <div className="register-link">
+                            <div>
+                                Aún no posee una cuenta? 
+                            </div>
+                            <Link to="/register" className="btn-register">
+                                Registrarse
+                            </Link>
                         </div>
                     </form>
                 </div>

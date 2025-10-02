@@ -1,47 +1,55 @@
 import './header.css'
-import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+
+interface Category {
+    id: number;
+    nombre: string;
+}
 
 function Header() {
-    const [menuVisible, setMenuVisible] = useState(false);
+    const [categories, setCategories] = useState<Category[]>([])
+    const [option, setOption] = useState('');
 
-    const handleMenuClick = () => {
-        setMenuVisible((prev) => !prev);
-    };
+    useEffect(() => {
+        fetch('http://localhost:3000/api/eventos/clases')
+        .then((res) => res.json())
+        .then((resData) => {
+            setCategories(resData.data)
+        })
+        .catch((err) => console.error("Error al cargar las categorías:", err))
+    }, [])
+
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setOption(e.target.value)
+    }
 
     return (
         <>
             <div className='Header'>                
                 <nav className='navigation'>
-                    <a href="/" title="Home" className="logo"> <img src="src/images/mainlogo.png" alt="Logo" width="45"/> </a>                    
-                    <span className='menu-icon' onClick={handleMenuClick}>Ver Menú</span>
-                    <ul className={menuVisible ? 'show' : ''}>
-                        <li>
-                            <select>
-                                <option value="noCity">Ciudad</option>
-                                <option value="city1">Córdoba</option>
-                                <option value="city2">La Plata</option>
-                                <option value="city3">Mendoza</option>
-                                <option value="city4">Rosario</option>
-                                <option value="city5">San Juan</option>
-                                <option value="city6">Santa Fe</option>
-                            </select></li>
-                        <li>
-                            <select>
-                                <option value="noCategory">Categorías</option>
-                                <option value="cat1">Categoría 1</option>
-                                <option value="cat2">Categoría 2</option>
-                                <option value="cat3">Categoría 3</option>
-                                <option value="cat4">Categoría 4</option>
-                                <option value="cat5">Categoría 5</option>
-                                <option value="cat6">Categoría 6</option>
-                            </select></li>
-                        <li><a href="/login">Iniciar Sesión</a></li>
-                        <li><a href="/register">Registrarse</a></li>
-                    </ul>
-                    <form> 
-                        <input type="search" name="query" placeholder="Buscar"/>
-                        <input type="submit" value="Ir"/>
-                    </form>
+                    <Link to="/" title="Home" className="logo">
+                        <img src="src/images/mainlogo.png" alt="Logo" width="45"/>
+                    </Link>               
+                    <div className='search-acc'>
+                        <label htmlFor="select-categories" className="label-categories">
+                            categorías
+                        </label>
+                        <select className="select-categories" name="select-categories" value={option} onChange={handleChange}>
+                            {categories.map((cat) => (
+                                <option key={cat.id} value={cat.nombre}>
+                                    {cat.nombre}
+                                </option>
+                            ))}
+                        </select>
+                        <form> 
+                            <input type="search" name="search" placeholder="Buscar"/>
+                            <input type="submit" value="Ir"/>
+                        </form>
+                        <Link to="/login" id="btnAcceder">
+                            Acceder
+                        </Link>
+                    </div>
                 </nav>
             </div>
         </>

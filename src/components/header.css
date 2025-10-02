@@ -16,43 +16,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.navigation .menu-icon {
-  font-size: 14px;
-  width: 80px;
-  margin: 5px auto;
-  transition: all 0.25s linear;
-  border-radius: 7px;
-  border: 2px solid #000;
-  background-color: rgb(220, 237, 240);
-  display: none; /* Ocultar por defecto */
-}
-
-.navigation .menu-icon:hover {
-  background: rgb(144, 177, 214);
-}
-
-.navigation ul {
-    font-size: 5px;
-    margin: 0 20px;
-    gap: 5px;
-}
-
-.navigation, .navigation ul {
   flex: 1;
-  display: flex;
-  align-items: center;
   height: 100%;
   padding: 0 3em;
 }
 
-.navigation ul li {
-  display: inline-block;
+.search-acc {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.navigation ul li a {
+#btnAcceder {
   display: block;
   font-size: 17px;
   text-transform: uppercase;
@@ -63,31 +38,7 @@
   border-radius: 7px;
   border: 2px solid #000;
   background-color: rgb(220, 237, 240);
-  white-space: nowrap; /* <-- Evita el salto de línea */
-}
-
-.navigation ul li select {
-  font-family: 'Courier New', Courier, monospace;
-  text-align: center;
-  display: block;
-  font-size: 17px;
-  text-transform: uppercase;
-  text-decoration: none;
-  color: black;
-  padding: 2px 16px;
-  transition: all 0.25s linear;
-  border-radius: 7px;
-  border: 2px solid #000;
-  background-color: rgb(220, 237, 240);
-  white-space: nowrap; /* <-- Evita el salto de línea */
-}
-
-option {
-  text-align: justify;
-}
-
-.navigation ul li a:hover, .navigation ul li select:hover {
-  background: rgb(144, 177, 214);
+  white-space: nowrap;
 }
 
 .navigation form {
@@ -96,12 +47,34 @@ option {
   height: 30px;
 }
 
+.navigation .label-categories {
+  font-size: 14px;
+}
+
+.navigation .select-categories {
+  font-size: 14px;
+  padding: 0 8px;
+  border: 2px solid #000;
+  background-color: #fff;
+  color: #000;
+  border-radius: 5px;
+  width: 15vw;
+  cursor: pointer;
+}
+
+.navigation .select-categories option {
+  padding: 5px 10px;
+  background-color: #fff; 
+  color: #000;
+}
+
 .navigation form input[type="search"] {
   font-size: 14px;
   padding: 0 8px;
   border: 2px solid #000;
   border-right: none;
   border-radius: 5px 0 0 5px;
+  width: 30vw;
 }
 
 .navigation form input[type="submit"] {
@@ -119,7 +92,6 @@ option {
   transition: all 0.25s linear;
 }
 
-/* Diseño responsivo para pantallas medianas */
 @media (max-width: 1060px) {
   .Header {
     font-size: 8px;
@@ -130,7 +102,7 @@ option {
     align-items: stretch;
     padding: 0 1em;
   }
-  .navigation .logo { /* Achica el area de interaccion del logo */
+  .navigation .logo { 
     display: inline-block;
     margin: 0 auto;
     width: auto;
@@ -172,7 +144,6 @@ option {
   }
 }
 
-/* Diseño responsivo para pantallas pequeñas (prototipo) */
 @media (max-width: 420px) {
   .navigation .menu-icon {
     display: block;
@@ -182,12 +153,12 @@ option {
     margin-bottom: 5px;
     flex-wrap: wrap;
     justify-content: center;
-    display: none; /* Oculto por defecto */
+    display: none; 
   }
   .navigation ul.show {
     flex-wrap: wrap;
     justify-content: center;
-    display: block; /* Visible con show */
+    display: block; 
   }
   .navigation ul li {
     margin-bottom: 3px;
