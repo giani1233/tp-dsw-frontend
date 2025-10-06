@@ -11,7 +11,7 @@ function Register() {
     const { register, handleSubmit, watch, formState: { errors }, control } = useForm();
 
     const onSubmit = async (data: any) => {
-        console.log(data)
+        console.log(data) 
 
         try {
             const userData = {
@@ -73,7 +73,7 @@ function Register() {
                     <form onSubmit={handleSubmit(onSubmit)} noValidate>
                         <div className="input-group">
                             <label htmlFor="dni">Documento:</label>
-                            <input type="text" id="dni" {...register("dni", {required: "El dni es obligatorio",
+                            <input type="text" id="dni" minLength={8} maxLength={8} {...register("dni", {required: "El dni es obligatorio",
                                                                             minLength: {value: 8, message: "El dni debe tener 8 caracteres"},
                                                                             maxLength: {value: 8, message: "El dni debe tener 8 caracteres"},   
                                                                             })}
@@ -149,7 +149,7 @@ function Register() {
                         )}
                         <div className="input-group">
                             <label htmlFor="contraseña">Contraseña:</label>
-                            <input type="password" id="contraseña" {...register("contraseña", {required: "La contraseña es obligatoria",
+                            <input type="password" id="contraseña" minLength={8} maxLength={20} {...register("contraseña", {required: "La contraseña es obligatoria",
                                                                                             minLength: {value: 8, message: "La contraseña debe tener entre 8 y 20 caracteres"},
                                                                                             maxLength: {value: 20, message: "La contraseña debe tener entre 8 y 20 caracteres"},
                                                                                             pattern: {value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, message: "La contraseña debe tener al menos una mayúscula y un número"}
