@@ -24,6 +24,14 @@ function Header() {
         setOption(e.target.value)
     }
 
+    const cerrarSesion = () => {
+        localStorage.removeItem('token')
+        localStorage.removeItem('usuario')
+        window.location.href = '/'
+    }
+
+    const usuario = localStorage.getItem('usuario')
+
     return (
         <>
             <div className='Header'>                
@@ -46,9 +54,12 @@ function Header() {
                             <input type="search" name="search" placeholder="Buscar"/>
                             <input type="submit" value="Ir"/>
                         </form>
-                        <Link to="/login" id="btnAcceder">
-                            Acceder
-                        </Link>
+                        {usuario ? (
+                            <button onClick={cerrarSesion} className='btn-cerrar-sesion'>Cerrar sesión</button>
+                        ) :
+                        (
+                            <Link to="/login" id="btnAcceder">Acceder</Link>
+                        )}
                     </div>
                 </nav>
             </div>

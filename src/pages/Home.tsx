@@ -3,23 +3,23 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { useState, useEffect } from 'react';
 
-function formatearFecha(fechaISO: string) { // Formatea fechaInicio del evento (Convierte "2023-11-15" a "15 de Noviembre, 2023")
-  const meses = [
-    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-  ];
-  const fecha = new Date(fechaISO);
-  const dia = fecha.getDate();
-  const mes = meses[fecha.getMonth()];
-  const anio = fecha.getFullYear();
-  return `${dia} de ${mes}, ${anio}`;
+function formatearFecha(fechaISO: string) { 
+    const meses = [
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ];
+    const fecha = new Date(fechaISO);
+    const dia = fecha.getDate();
+    const mes = meses[fecha.getMonth()];
+    const anio = fecha.getFullYear();
+    return `${dia} de ${mes}, ${anio}`;
 }
 
-function formatearHora(fechaHora: string) { // Formatea horaInicio del evento (Convierte "2023-11-15 21:00:00" a "21:00hs")
-  const fecha = new Date(fechaHora.replace(' ', 'T'));
-  const horas = fecha.getHours().toString().padStart(2, '0');
-  const minutos = fecha.getMinutes().toString().padStart(2, '0');
-  return `${horas}:${minutos}hs`;
+function formatearHora(fechaHora: string) { 
+    const fecha = new Date(fechaHora.replace(' ', 'T'));
+    const horas = fecha.getHours().toString().padStart(2, '0');
+    const minutos = fecha.getMinutes().toString().padStart(2, '0');
+    return `${horas}:${minutos}hs`;
 }
 
 function Home() {
@@ -42,7 +42,7 @@ function Home() {
         }
         }
     fetchEventos()
-  }, [])
+    }, [])
 
     return (
         <>
