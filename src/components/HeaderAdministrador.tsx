@@ -12,13 +12,15 @@ function HeaderAdministrador() {
     return (
         <>
             <div className='HeaderAdministrador'>                
-                <nav className='navigation'>
+                <nav className='navigationAdministrador'>
                     <Link to="/administrador" title="Home" className="logo">
                         <img src="src/images/mainlogo.png" alt="Logo" width="45"/>
-                    </Link>               
-                    <div>
-                        Este es el header del admin
-                    </div>
+                    </Link>
+                    <ul className='menu-admin'>  
+                        <li><Link to="/administrador">Eventos</Link></li>
+                        <li><Link to="/administrador">Usuarios</Link></li>
+                        <li><Link to="/administrador">Ubicaciones</Link></li>
+                    </ul>
                     <button onClick={cerrarSesion} className='btn-cerrar-sesion'>Cerrar sesión</button>
                 </nav>
             </div>

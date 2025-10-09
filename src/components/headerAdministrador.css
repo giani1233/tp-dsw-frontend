@@ -4,7 +4,6 @@
     background-color: #659992;
     padding: 6px;
     border: 2.5px solid #000;
-    text-align: center;
     position: fixed;
     top: 0;
     left: 0;
@@ -16,9 +15,24 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex: 1;
-  height: 100%;
   padding: 0 3em;
+}
+
+.menu-admin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    list-style: none;
+    flex: 1; 
+    text-align: center;
+}
+
+.menu-admin a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: large;
 }
 
 .btn-cerrar-sesion {
@@ -26,14 +40,13 @@
     color: white;
     border: none;
     padding: 8px 16px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    margin: 4px 2px;
-    cursor: pointer;
     border-radius: 4px;
-    transition-duration: 0.4s;
+    cursor: pointer;
+    transition: background-color 0.4s;
+}
+
+.btn-cerrar-sesion:hover {
+    background-color: #cc0000;
 }
 
 @media (max-width: 1060px) {
@@ -41,22 +54,15 @@
     font-size: 8px;
     padding: 3px;
   }
+
   .navigationAdministrador {
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
     padding: 0 1em;
   }
-  .navigationAdministrador .logo { 
-    display: inline-block;
-    margin: 0 auto;
-    width: auto;
-    text-align: center;
-  }
-  .navigationAdministrador .logo img {
-    width: 32px;
-    height: auto;
-  }
-}
 
-@media (max-width: 420px) {
+  .menu-admin {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
 }
