@@ -8,9 +8,22 @@ export interface Evento {
     horaInicio: Date;
     horaFin: Date;
     cuposDisponibles: number;
+    edadMinima: number,
     estado: string;
     destacado: boolean;
-    idCategoria: number;
-    idUsuario: number;
-    idDireccion: number;
+    direccion: {
+    altura: number;
+    calle: string;
+    localidad: {
+        nombre: string;
+    }
+    };
+    organizador: {
+        nombre: string;
+        apellido: string;
+        empresa: string;
+    };
+    claseEvento: {
+        nombre: string;
+    };
 }
