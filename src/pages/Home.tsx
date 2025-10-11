@@ -55,7 +55,7 @@ function Home() {
                 {!cargando && !error && eventos.length === 0 && <p>No hay eventos disponibles.</p>}
                 {!cargando && !error && eventos.map(evento => (
                 <div key={evento.id} className="evento">
-                    <h2>{evento.nombre}</h2> {/* Quizás podemos hacer que el organizador pueda elegir un emoji a mostrar al momento de crear el evento, y este se carga acá, para que tenga un poco mas de color nomás */}
+                    <h2>{evento.nombre}</h2> {}
                     <hr />
                     <p className="descripcion">{evento.descripcion}</p>
                     <p><strong>Fecha:</strong> {formatearFecha(evento.fechaInicio)}</p>

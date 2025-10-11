@@ -35,6 +35,11 @@
   font-size: large;
 }
 
+.menu-admin a:hover {
+    scale: calc(11.5rem);
+    color: #000;
+}
+
 .btn-cerrar-sesion {
     background-color: #ff4d4d;
     color: white;

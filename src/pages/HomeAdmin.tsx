@@ -88,6 +88,20 @@ function HomeAdmin() {
         .catch((err) => console.error("Error al aprobar el evento:", err));
     };
 
+    const handleFiltro = (valor: string) => {
+    const query = valor.trim() ? `?filtro=${encodeURIComponent(valor)}` : '';
+
+    Promise.all([
+        fetch(`http://localhost:3000/api/eventos/pendientes${query}`).then(res => res.json()),
+        fetch(`http://localhost:3000/api/eventos/aprobados${query}`).then(res => res.json())
+    ])
+        .then(([pendientesData, aprobadosData]) => {
+        setEventosPendientes(pendientesData.data);
+        setEventosAprobados(aprobadosData.data);
+        })
+        .catch(err => console.error("Error al filtrar los eventos:", err));
+    };
+
     if (eventoSeleccionado) {
         return (
             <>
@@ -104,7 +118,14 @@ function HomeAdmin() {
         <HeaderAdministrador />
             <div className='HomeAdmin'>
                 <h2> Gestión de eventos </h2>
-
+                <div id = "contenedor-busqueda-eventos">
+                    <input
+                        type="text"
+                        placeholder="Buscar evento..."
+                        className="busqueda-eventos"
+                        onChange={(e) => handleFiltro(e.target.value)}
+                    />
+                </div>
                 <section className='EventosPendientes'>
                     <h3> Eventos pendientes de aprobación </h3>
                     {eventosPendientes.length === 0 ? (

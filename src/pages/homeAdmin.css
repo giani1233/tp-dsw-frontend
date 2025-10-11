@@ -12,6 +12,26 @@
     padding: 20px;
 }
 
+#contenedor-busqueda-eventos {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.busqueda-eventos {
+    width: 50%;
+    max-width: 400px;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    outline: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.2s ease-in-out;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
 .EventosPendientes {
     text-align: left;
 }

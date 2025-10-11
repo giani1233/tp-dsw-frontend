@@ -5,6 +5,7 @@ import Register from './pages/Register'
 import HomeOrganizador from './pages/HomeOrganizador'
 import HomeAdmin from './pages/HomeAdmin'
 import RutaProtegida from './components/ProtectedRoute'
+import GestionUsuarios from './pages/GestionUsuarios'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/organizador" element={<RutaProtegida tiposPermitidos={['organizador']}><HomeOrganizador /></RutaProtegida>} />
         <Route path="/administrador" element={<RutaProtegida tiposPermitidos={['administrador']}><HomeAdmin /></RutaProtegida>} />
+        <Route path="/gestionUsuarios" element={<RutaProtegida tiposPermitidos={['administrador']}><GestionUsuarios /></RutaProtegida>} />
       </Routes>
     </>
   )
