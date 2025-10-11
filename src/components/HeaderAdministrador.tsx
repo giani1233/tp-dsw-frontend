@@ -19,8 +19,8 @@ function HeaderAdministrador() {
                     <ul className='menu-admin'>  
                         <li><Link to="/administrador">Eventos</Link></li>
                         <li><Link to="/gestionUsuarios">Usuarios</Link></li>
+                        <li><Link to="/gestionCategorias">Categorías</Link></li>
                         <li><Link to="/administrador">Ubicaciones</Link></li>
-                        <li><Link to="/administrador">Categorías</Link></li>
                     </ul>
                     <button onClick={cerrarSesion} className='btn-cerrar-sesion'>Cerrar sesión</button>
                 </nav>

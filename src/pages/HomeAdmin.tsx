@@ -102,17 +102,6 @@ function HomeAdmin() {
         .catch(err => console.error("Error al filtrar los eventos:", err));
     };
 
-    if (eventoSeleccionado) {
-        return (
-            <>
-                <ProjectCard
-                    evento={eventoSeleccionado}
-                    onClose={handleVolver}
-                />
-            </>
-        )
-    }
-
     return (
         <>
         <HeaderAdministrador />
@@ -136,8 +125,8 @@ function HomeAdmin() {
                                 <div key={evento.id} className='evento-card' onClick={() => handleClick(evento)}>
                                     <h4>{evento.nombre}</h4>
                                 <div className='botones-card'>
-                                    <button onClick={(e) => { e.stopPropagation(); handleAceptar(evento.id); }}>Aceptar</button>
-                                    <button onClick={(e) => { e.stopPropagation(); handleRechazar(evento.id); }}>Rechazar</button>
+                                    <button onClick={(e) => { e.stopPropagation(); handleAceptar(evento.id); }} id="aceptar-evento">Aceptar</button>
+                                    <button onClick={(e) => { e.stopPropagation(); handleRechazar(evento.id); }} id="rechazar-evento">Rechazar</button>
                                 </div>
                                 </div>
                             ))}
@@ -155,7 +144,7 @@ function HomeAdmin() {
                                 <div key={evento.id} className='evento-card' onClick={() => handleClick(evento)}>
                                     <h4>{evento.nombre}</h4>
                                 <div className='botones-card'>
-                                    <button onClick={(e) => { e.stopPropagation(); handleDestacado(evento); }}>
+                                    <button onClick={(e) => { e.stopPropagation(); handleDestacado(evento); }} id="boton-destacado">
                                         {evento.destacado ? "Quitar de destacados" : "Marcar como destacado"}
                                     </button>
                                 </div>
@@ -165,6 +154,14 @@ function HomeAdmin() {
                     )}
                 </section>
             </div>
+            {eventoSeleccionado && (
+                <div className="overlay">
+                    <ProjectCard
+                        evento={eventoSeleccionado}
+                        onClose={handleVolver}
+                    />
+                </div>
+            )}
         </>
     )
 }

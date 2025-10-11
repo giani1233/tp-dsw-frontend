@@ -6,7 +6,7 @@ interface Props {
     onClose: () => void;
 }
 
-const ProjectCardPendiente = ({ evento, onClose }: Props) => {
+const ProjectCard = ({ evento, onClose }: Props) => {
     return (
         <div className="ContenedorProjectCard">
             <div className="ProjectCardPendiente">
@@ -29,4 +29,4 @@ const ProjectCardPendiente = ({ evento, onClose }: Props) => {
     )
 }
 
-export default ProjectCardPendiente;
+export default ProjectCard;
