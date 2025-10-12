@@ -7,6 +7,7 @@ import HomeAdmin from './pages/HomeAdmin'
 import RutaProtegida from './components/ProtectedRoute'
 import GestionUsuarios from './pages/GestionUsuarios'
 import GestionCategorias from './pages/GestionCategorias'
+import GestionDirecciones from './pages/GestionDirecciones'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/administrador" element={<RutaProtegida tiposPermitidos={['administrador']}><HomeAdmin /></RutaProtegida>} />
         <Route path="/gestionUsuarios" element={<RutaProtegida tiposPermitidos={['administrador']}><GestionUsuarios /></RutaProtegida>} />
         <Route path="/gestionCategorias" element={<RutaProtegida tiposPermitidos={['administrador']}><GestionCategorias /></RutaProtegida>} />
+        <Route path="/gestionDirecciones" element={<RutaProtegida tiposPermitidos={['administrador']}><GestionDirecciones /></RutaProtegida>} />
       </Routes>
     </>
   )
