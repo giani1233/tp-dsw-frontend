@@ -147,6 +147,7 @@ function HomeAdmin() {
                                     <button onClick={(e) => { e.stopPropagation(); handleDestacado(evento); }} id="boton-destacado">
                                         {evento.destacado ? "Quitar de destacados" : "Marcar como destacado"}
                                     </button>
+                                    <button onClick={(e) => { e.stopPropagation(); handleRechazar(evento.id); }} id="rechazar-evento">Eliminar evento</button>
                                 </div>
                                 </div>
                             ))}

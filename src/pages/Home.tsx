@@ -24,36 +24,108 @@ function formatearHora(fechaHora: string) {
 
 function Home() {
     const [eventos, setEventos] = useState<any[]>([])
+    const [eventosFiltrados, setEventosFiltrados] = useState<any[]>([])
+    const [eventosDestacados, setEventosDestacados] = useState<any[]>([])
     const [cargando, setCargando] = useState(true)
     const [error, setError] = useState<string | null>(null)
+    const [slideIndex, setSlideIndex] = useState(0);
+    const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('')
+    const [busqueda, setBusqueda] = useState('')
 
     useEffect(() => {
     const fetchEventos = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/api/eventos/aprobados')
+                if (!response.ok) throw new Error('Error al cargar eventos')
+                const data = await response.json()
+                console.log(data)
+                setEventos(Array.isArray(data) ? data : data.data)
+            } catch (error: any) {
+                setError(error.message || 'Ocurrió un error')
+            } finally {
+                setCargando(false)
+            }
+        }
+    const fetchDestacados = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/eventos')
-            if (!response.ok) throw new Error('Error al cargar eventos')
+            const response = await fetch('http://localhost:3000/api/eventos/destacados')
+            if (!response.ok) throw new Error('Error al cargar eventos destacados')
             const data = await response.json()
             console.log(data)
-            setEventos(Array.isArray(data) ? data : data.data)
+            setEventosDestacados(Array.isArray(data) ? data : data.data)
         } catch (error: any) {
             setError(error.message || 'Ocurrió un error')
         } finally {
             setCargando(false)
         }
-        }
+    }
     fetchEventos()
+    fetchDestacados()
     }, [])
+
+    useEffect(() => {
+        let filtrados = eventos
+        if (categoriaSeleccionada) {
+            filtrados = filtrados.filter(e => e.claseEvento?.nombre === categoriaSeleccionada)
+        }
+        if (busqueda) {
+            filtrados = filtrados.filter(e =>
+                e.nombre.toLowerCase().includes(busqueda.toLowerCase()) 
+            )
+        }
+        setEventosFiltrados(filtrados)
+    }, [categoriaSeleccionada, busqueda, eventos])
+
+    const nextSlide = () => {
+        setSlideIndex((prevIndex) => (prevIndex + 1) % eventos.length);
+    }
+    const prevSlide = () => {
+        setSlideIndex((prevIndex) => (prevIndex - 1 + eventos.length) % eventos.length);
+    }
 
     return (
         <>
-        <Header />
+        <Header 
+            onCategoryChange={setCategoriaSeleccionada}
+            onSearch={setBusqueda}
+        />
             <div className='Home'>
             <h1><u>Eventos disponibles a la fecha de: {new Date().toLocaleDateString()}</u></h1>
-            <section id="eventos">
+            <h2>Eventos destacados</h2>
+            <div className="contenedor-carrusel">
+                {cargando && <p>Cargando...</p>}
+                {error && <p style={{color: 'red'}}>Error: {error}</p>}
+                {!cargando && !error && eventosDestacados.length === 0 && <p>No hay eventos destacados.</p>}
+                {!cargando && !error && (
+                    <div className="carrusel">
+                        <button onClick={prevSlide} className="flecha-izquierda">&#10094;</button>
+                        <div className="contenedor-slide">
+                            <div className="slides" style={{ transform: `translateX(-${slideIndex * 100}%)` }}>
+                                {eventosDestacados.map((evento) => (
+                                    <div key={evento.id} className="slide">
+                                        <h2>{evento.nombre}</h2> {}
+                                        <hr />
+                                        <p className="descripcion">{evento.descripcion}</p>
+                                        <p><strong>Fecha:</strong> {formatearFecha(evento.fechaInicio)}</p>
+                                        <p><strong>Hora de inicio:</strong> {formatearHora(evento.horaInicio)}</p>
+                                        <p><strong>Precio de entrada:</strong> ${evento.precioEntrada}</p>
+                                        <p><strong>Cupos disponibles:</strong> {evento.cantidadCupos}</p>
+                                        <p><strong>Edad mínima:</strong> {evento.edadMinima ? `${evento.edadMinima} años` : 'Sin restricción'}</p>
+                                        <button>Comprar Entrada</button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <button className="flecha-derecha" onClick={nextSlide}>&gt;</button>
+                    </div>
+                )}
+            </div>
+            <h2>Todos los eventos</h2>
+            <section className="eventos">
                 {cargando && <p>Cargando...</p>}
                 {error && <p style={{color: 'red'}}>Error: {error}</p>}
                 {!cargando && !error && eventos.length === 0 && <p>No hay eventos disponibles.</p>}
-                {!cargando && !error && eventos.map(evento => (
+                {!cargando && !error && eventosFiltrados.map(evento => (
                 <div key={evento.id} className="evento">
                     <h2>{evento.nombre}</h2> {}
                     <hr />
@@ -66,40 +138,6 @@ function Home() {
                     <button>Comprar Entrada</button>
                 </div>
                 ))}
-
-                <div className="evento" id="evento-1">
-                    <h2>Concierto de Electrónica 🎶</h2> <hr></hr>
-                    <p className="descripcion">Disfruta de una noche llena de música en vivo de las mejores bandas de electrónica.</p>
-                    <p><strong>Fecha:</strong> 15 de Noviembre, 2025</p>
-                    <p><strong>Hora de inicio:</strong> 21:00hs</p>
-                    <p><strong>Precio de entrada:</strong> $8500</p>
-                    <p><strong>Cupos disponibles:</strong> 10000</p>
-                    <p><strong>Edad mínima:</strong> 18 años</p>
-                    <button>Comprar Entrada</button>
-                </div>
-
-                <div className="evento" id="evento-2">
-                    <h2>Obra de Teatro: "El Gran Show" 🎤</h2> <hr></hr>
-                    <p className="descripcion">Una comedia divertida que te hará reír de principio a fin.</p>
-                    <p><strong>Fecha:</strong> 20 de Noviembre, 2025</p>
-                    <p><strong>Hora de inicio:</strong> 20:00hs</p>
-                    <p><strong>Precio de entrada:</strong> $12000</p>
-                    <p><strong>Cupos disponibles:</strong> 5000</p>
-                    <p><strong>Edad mínima:</strong> 12 años</p>
-                    <button>Comprar Entrada</button>
-                </div>
-
-                <div className="evento" id="evento-3">
-                    <h2>Exposición de Arte Contemporáneo 🎨</h2> <hr></hr>
-                    <p className="descripcion">Explora las obras de artistas emergentes y consagrados en esta exposición única.</p>
-                    <p><strong>Fecha:</strong> 25 de Noviembre, 2025</p>
-                    <p><strong>Hora de inicio:</strong> 10:00hs</p>
-                    <p><strong>Precio de entrada:</strong> $5000</p>
-                    <p><strong>Cupos disponibles:</strong> 200</p>
-                    <p><strong>Edad mínima:</strong> Sin restricción</p>
-                    <button>Comprar Entrada</button>
-                </div>
-
             </section>
             </div>
         <Footer />

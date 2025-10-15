@@ -8,12 +8,12 @@
     color: #333;
 }
 
-h1 {
+h1, h2 {
     text-align: center;
     color: #444;
 }
 
-#eventos {
+.eventos {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
@@ -51,4 +51,55 @@ button {
 
 button:hover {
     background-color: #4e7c7a;
+}
+
+.contenedor-carrusel {
+    width: 90%;
+    margin: 0 auto;
+    position: relative;
+}
+
+.carrusel {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.contenedor-slide {
+    overflow: hidden;
+    width: 100%;
+}
+
+.slides {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.slide {
+    min-width: 100%;
+    background: #f8f8f8;
+    padding: 1rem;
+    margin: 0 0.5rem;
+    border-radius: 8px;
+}
+
+.flecha-izquierda, .flecha-derecha {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.flecha-derecha:hover, .flecha-izquierda:hover {
+    background: #0056b3;
+}
+
+@media(min-width: 768px){
+    .slide { min-width: 50%; }
+}
+
+@media(min-width: 1024px){
+    .slide { min-width: 33.33%; }
 }

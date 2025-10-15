@@ -7,9 +7,15 @@ interface Category {
     nombre: string;
 }
 
-function Header() {
+interface HeaderProps {
+    onCategoryChange: (categoria: string) => void;
+    onSearch: (busqueda: string) => void;
+}
+
+function Header({ onCategoryChange, onSearch }: HeaderProps) {
     const [categories, setCategories] = useState<Category[]>([])
     const [option, setOption] = useState('');
+    const [busqueda, setBusqueda] = useState('');
 
     useEffect(() => {
         fetch('http://localhost:3000/api/eventos/clases')
@@ -20,8 +26,21 @@ function Header() {
         .catch((err) => console.error("Error al cargar las categorías:", err))
     }, [])
 
-    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setOption(e.target.value)
+    const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value
+        setOption(value)
+        onCategoryChange(value)
+    }
+
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value
+        setBusqueda(value)
+        onSearch(value)
+    }
+
+    const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        onSearch(busqueda);
     }
 
     const cerrarSesion = () => {
@@ -43,16 +62,17 @@ function Header() {
                         <label htmlFor="select-categories" className="label-categories">
                             categorías
                         </label>
-                        <select className="select-categories" name="select-categories" value={option} onChange={handleChange}>
+                        <select className="select-categories" name="select-categories" value={option} onChange={handleCategoryChange}>
+                            <option value="">Todas</option>
                             {categories.map((cat) => (
                                 <option key={cat.id} value={cat.nombre}>
                                     {cat.nombre}
                                 </option>
                             ))}
                         </select>
-                        <form> 
-                            <input type="search" name="search" placeholder="Buscar"/>
-                            <input type="submit" value="Ir"/>
+                        <form onSubmit={handleSearchSubmit} className="form-busqueda"> 
+                            <input type="search" name="search" placeholder="Buscar" value={busqueda} onChange={handleSearchChange} />
+                            <input type="submit" value="Ir" />
                         </form>
                         {usuario ? (
                             <button onClick={cerrarSesion} className='btn-cerrar-sesion'>Cerrar sesión</button>
