@@ -65,7 +65,7 @@ function Register() {
     const watchTipo = useWatch({control , name: "tipo", defaultValue: ""})
     return (
         <>
-            <Header />
+            <Header onCategoryChange={() => {}} onSearch={() => {}} />
 
             <div className="register-container">
                 <div className="register-form">

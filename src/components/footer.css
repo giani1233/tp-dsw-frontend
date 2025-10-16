@@ -9,12 +9,16 @@
     border: 2.5px solid #000;
     text-align: center;
     position: absolute;
+    background-image: url('../images/footerwallpaper.avif');
+    background-size: 30%; /* Ajusta la imagen para cubrir todo el header */
+    background-position: center; /* Centra la imagen */
+    background-repeat: repeat; /* Evita que se repita */
 }
 
 .Footer p {
     color: #000;
 }
 .Footer a {
-    color: #095eb9;
+    color: #3a424b;
     text-decoration: none;
 }

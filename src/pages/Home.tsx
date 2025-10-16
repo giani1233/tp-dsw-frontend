@@ -31,6 +31,26 @@ function Home() {
     const [slideIndex, setSlideIndex] = useState(0);
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('')
     const [busqueda, setBusqueda] = useState('')
+    const [organizadores, setOrganizadores] = useState<any[]>([]);
+
+    useEffect(() => {
+    const fetchOrganizadores = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/api/usuarios');
+            if (!response.ok) throw new Error('Error al cargar organizadores');
+            const data = await response.json();
+            setOrganizadores(Array.isArray(data) ? data : data.data);
+        } catch (error: any) {
+            // Puedes manejar el error si lo deseas
+        }
+    };
+    fetchOrganizadores();
+}, []);
+
+    function obtenerNombreOrganizador(id: number) {
+        const organizador = organizadores.find(o => o.id === id);
+        return organizador ? `${organizador.nombre} ${organizador.apellido}` : `ID ${id}`;
+    }
 
     useEffect(() => {
     const fetchEventos = async () => {
@@ -117,7 +137,7 @@ function Home() {
         />
             <div className='Home'>
             <h1><u>Eventos disponibles a la fecha de: {new Date().toLocaleDateString()}</u></h1>
-            <h2>Eventos destacados</h2>
+            <h2>🌟 Eventos destacados 🌟</h2>
             <div className="contenedor-carrusel">
                 {cargando && <p>Cargando...</p>}
                 {error && <p style={{color: 'red'}}>Error: {error}</p>}
@@ -137,6 +157,7 @@ function Home() {
                                         <p><strong>Precio de entrada:</strong> ${evento.precioEntrada}</p>
                                         <p><strong>Cupos disponibles:</strong> {evento.cantidadCupos}</p>
                                         <p><strong>Edad mínima:</strong> {evento.edadMinima ? `${evento.edadMinima} años` : 'Sin restricción'}</p>
+                                        <p><strong>Organiza:</strong> {obtenerNombreOrganizador(evento.organizadorId)}</p>
                                         <button onClick={() => handleCompra(evento)}>Comprar Entrada</button>
                                     </div>
                                 ))}
@@ -145,8 +166,8 @@ function Home() {
                         <button className="flecha-derecha" onClick={nextSlide}>&gt;</button>
                     </div>
                 )}
-            </div>
-            <h2>Todos los eventos</h2>
+            </div> 
+            <h2>⭐ Todos los eventos ⭐</h2>
             <section className="eventos">
                 {cargando && <p>Cargando...</p>}
                 {error && <p style={{color: 'red'}}>Error: {error}</p>}
@@ -161,6 +182,7 @@ function Home() {
                     <p><strong>Precio de entrada:</strong> ${evento.precioEntrada}</p>
                     <p><strong>Cupos disponibles:</strong> {evento.cantidadCupos}</p>
                     <p><strong>Edad mínima:</strong> {evento.edadMinima ? `${evento.edadMinima} años` : 'Sin restricción'}</p>
+                    <p><strong>Organiza:</strong> {obtenerNombreOrganizador(evento.organizadorId)}</p>
                     <button onClick={() => handleCompra(evento)}>Comprar Entrada</button>
                 </div>
                 ))}

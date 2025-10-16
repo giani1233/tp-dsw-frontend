@@ -42,7 +42,7 @@ h1, h2 {
 }
 
 button {
-    background-color: #62a098;
+    background-color: rgb(228, 164, 45);
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
@@ -50,11 +50,11 @@ button {
 }
 
 button:hover {
-    background-color: #4e7c7a;
+    background-color: rgb(180, 130, 36);
 }
 
 .contenedor-carrusel {
-    width: 90%;
+    width: 94%;
     margin: 0 auto;
     position: relative;
 }
@@ -84,7 +84,7 @@ button:hover {
 }
 
 .flecha-izquierda, .flecha-derecha {
-    background: #007bff;
+    background: rgb(155, 107, 18);
     color: white;
     border: none;
     padding: 0.5rem 1rem;

@@ -62,7 +62,7 @@ function Login() {
 
     return (
         <>
-            <Header />
+            <Header onCategoryChange={() => {}} onSearch={() => {}} />
 
             <div className="login-container">
                 <div className="login-form">

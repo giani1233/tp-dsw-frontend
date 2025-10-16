@@ -60,7 +60,7 @@ function Header({ onCategoryChange, onSearch }: HeaderProps) {
                     </Link>               
                     <div className='search-acc'>
                         <label htmlFor="select-categories" className="label-categories">
-                            categorías
+                            Categorías:
                         </label>
                         <select className="select-categories" name="select-categories" value={option} onChange={handleCategoryChange}>
                             <option value="">Todas</option>
