@@ -60,7 +60,6 @@ function HomeOrganizador() {
     alert('✅ ¡Creación exitosa!')
 
   const handleSubmit = () => {
-    // Validación básica
     if (!eventoData.nombre || !eventoData.descripcion || !eventoData.fechaInicio || !eventoData.horaInicio) {
       alert('Por favor complete todos los campos requeridos');
       return;
