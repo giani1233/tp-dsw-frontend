@@ -83,6 +83,32 @@ function Home() {
         setSlideIndex((prevIndex) => (prevIndex - 1 + eventos.length) % eventos.length);
     }
 
+    const handleCompra = async (evento: any) => {
+        const usuario = JSON.parse(localStorage.getItem('usuario') || null);
+        if(!usuario) {
+            window.location.href = '/login';
+            return;
+        }
+        try {
+            const response = await fetch('http://localhost:3000/api/pagos/crear-preferencia', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ titulo: evento.nombre, monto: evento.precioEntrada, cantidad: 1, idEvento: evento.id, idUsuario: usuario.id })
+            })
+
+            const data = await response.json()
+
+            if (data.id) {
+                const mpUrl = `https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=${data.id}`;
+                window.location.href = mpUrl;
+            } else {
+                console.error('No se pudo crear la preferencia:', data);
+            }
+        } catch (error) {
+            console.error('Error al procesar el pago:', error);
+        }
+    }
+
     return (
         <>
         <Header 
@@ -111,7 +137,7 @@ function Home() {
                                         <p><strong>Precio de entrada:</strong> ${evento.precioEntrada}</p>
                                         <p><strong>Cupos disponibles:</strong> {evento.cantidadCupos}</p>
                                         <p><strong>Edad mínima:</strong> {evento.edadMinima ? `${evento.edadMinima} años` : 'Sin restricción'}</p>
-                                        <button>Comprar Entrada</button>
+                                        <button onClick={() => handleCompra(evento)}>Comprar Entrada</button>
                                     </div>
                                 ))}
                             </div>
@@ -135,7 +161,7 @@ function Home() {
                     <p><strong>Precio de entrada:</strong> ${evento.precioEntrada}</p>
                     <p><strong>Cupos disponibles:</strong> {evento.cantidadCupos}</p>
                     <p><strong>Edad mínima:</strong> {evento.edadMinima ? `${evento.edadMinima} años` : 'Sin restricción'}</p>
-                    <button>Comprar Entrada</button>
+                    <button onClick={() => handleCompra(evento)}>Comprar Entrada</button>
                 </div>
                 ))}
             </section>
