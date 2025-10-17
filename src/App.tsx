@@ -11,6 +11,7 @@ import GestionDirecciones from './pages/GestionDirecciones'
 import PendingPage from './pages/pagos/PendingPage'
 import FailurePage from './pages/pagos/FailurePage'
 import SuccessPage from './pages/pagos/SuccessPage'
+import MisEventos from './pages/MisEventos'
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/gestionUsuarios" element={<RutaProtegida tiposPermitidos={['administrador']}><GestionUsuarios /></RutaProtegida>} />
         <Route path="/gestionCategorias" element={<RutaProtegida tiposPermitidos={['administrador']}><GestionCategorias /></RutaProtegida>} />
         <Route path="/gestionDirecciones" element={<RutaProtegida tiposPermitidos={['administrador']}><GestionDirecciones /></RutaProtegida>} />
+        <Route path="/misEventos" element={<RutaProtegida tiposPermitidos={['organizador']}><MisEventos /></RutaProtegida>} />
       </Routes>
     </>
   )

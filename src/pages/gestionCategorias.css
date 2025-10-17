@@ -26,9 +26,10 @@
 }
 
 .btn-agregar-categoria {
-    width: 10%;
-    max-width: 400px;
-    padding: 10px 15px;
+    width: auto;          
+    min-width: 120px;     
+    max-width: 90%;       
+    padding: 10px 20px;   
     font-size: 16px;
     border-radius: 25px;
     border: none;
@@ -39,8 +40,9 @@
     transition: all 0.2s ease-in-out;
     margin-bottom: 25px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    white-space: nowrap; 
+    text-align: center;
 }
-
 .btn-agregar-categoria:hover {
     background-color: #0056b3;
     box-shadow: 0 3px 8px rgba(0,0,0,0.15);

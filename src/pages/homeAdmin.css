@@ -65,23 +65,28 @@
 }
 
 .botones-card {
-    justify-content: center;
     display: flex;
+    justify-content: center;
     gap: 10px;
     margin-top: 5px;
-    flex-wrap: wrap;
-    width: 140%;
+    flex-wrap: wrap;      
+    width: 100%;           
+    box-sizing: border-box;
 }
 
 .botones-card button {
-    flex: 1;             
-    min-width: 50px;      
-    max-width: 100px;      
-    padding: 6px 8px;      
+    flex: 1 1 auto;      
+    min-width: 80px;        
+    max-width: 100%;       
+    padding: 6px 8px;
     border-radius: 4px;
     cursor: pointer;
     box-sizing: border-box;
+    white-space: normal;    
+    text-align: center;    
+    word-break: break-word; 
 }
+
 
 .overlay {
     position: fixed;
@@ -141,5 +146,26 @@
     .evento-card {
         height: 30vw;
         width: 30vw;
+    }
+}
+
+@media (max-width: 800px) {
+    .evento-card {
+        height: auto;       
+        width: 40vw;
+    }
+
+    .botones-card button {
+        max-width: 48%;     
+    }
+}
+
+@media (max-width: 500px) {
+    .evento-card {
+        width: 80vw;
+    }
+
+    .botones-card button {
+        max-width: 100%;  
     }
 }

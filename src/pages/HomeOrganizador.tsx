@@ -144,30 +144,30 @@ function HomeOrganizador() {
       <div className='HomeOrganizador'>
         <main id="organizador-panel">
           <div className='nuevoEvento-crear'>
-            <div className="nuevoEvento-container">
+            <div className="homeOrg-form">
               <form onSubmit={handleSubmit(onSubmit)} noValidate>
-                <div className="input-group">
+                <div className="homeOrg-input-group">
                   <label htmlFor="nombre">Nombre:</label>
-                  <input type="text" id="nombre" {...register("nombre", {
+                  <input className="homeOrg-input" type="text" id="nombre" {...register("nombre", {
                     required: "El nombre es obligatorio",
                     pattern: { value: /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s]+$/, message: "El nombre solo puede contener letras" }
                   })} />
-                  {errors.nombre && typeof errors.nombre.message === "string" && <span className="error-message">{errors.nombre.message}</span>}
+                  {errors.nombre && typeof errors.nombre.message === "string" && <span className="homeOrg-error">{errors.nombre.message}</span>}
                 </div>
 
-                <div className="input-group">
+                <div className="homeOrg-input-group">
                   <label htmlFor="descripcion">Descripción:</label>
-                  <input type="text" id="descripcion" minLength={20} maxLength={500} {...register("descripcion", {
+                  <input className="homeOrg-input" type="text" id="descripcion" minLength={20} maxLength={500} {...register("descripcion", {
                     required: "La descripción es obligatoria",
                     minLength: { value: 20, message: "La descripción debe tener al menos 20 caracteres." },
                     maxLength: { value: 500, message: "La descripción no debe sobrepasar los 500 caracteres" }
                   })} />
-                  {errors.descripcion && typeof errors.descripcion.message === "string" && <span className="error-message">{errors.descripcion.message}</span>}
+                  {errors.descripcion && typeof errors.descripcion.message === "string" && <span className="homeOrg-error">{errors.descripcion.message}</span>}
                 </div>
 
-                <div className="input-group">
+                <div className="homeOrg-input-group">
                   <label htmlFor="fecha">Fecha:</label>
-                  <input type="date" id="fecha" {...register("fecha", {
+                  <input className="homeOrg-input" type="date" id="fecha" {...register("fecha", {
                     required: "La fecha del Evento es obligatoria",
                     validate: {
                       notFuture: (value) => {
@@ -177,72 +177,72 @@ function HomeOrganizador() {
                       }
                     }
                   })} />
-                  {errors.fecha && typeof errors.fecha.message === "string" && <span className="error-message">{errors.fecha.message}</span>}
+                  {errors.fecha && typeof errors.fecha.message === "string" && <span className="homeOrg-error">{errors.fecha.message}</span>}
                 </div>
 
-                <div className="input-group">
+                <div className="homeOrg-input-group">
                   <label htmlFor="horaInicio">Hora de Inicio:</label>
-                  <input type="time" id="horaInicio" {...register("horaInicio", { required: "La hora de inicio es obligatoria" })} />
-                  {errors.horaInicio && typeof errors.horaInicio.message === "string" && <span className="error-message">{errors.horaInicio.message}</span>}
+                  <input className="homeOrg-input" type="time" id="horaInicio" {...register("horaInicio", { required: "La hora de inicio es obligatoria" })} />
+                  {errors.horaInicio && typeof errors.horaInicio.message === "string" && <span className="homeOrg-error">{errors.horaInicio.message}</span>}
                 </div>
 
-                <div className="input-group">
+                <div className="homeOrg-input-group">
                   <label htmlFor="horaFin">Hora de Fin:</label>
-                  <input type="time" id="horaFin" {...register("horaFin", { required: "La hora de fin es obligatoria" })} />
-                  {errors.horaFin && typeof errors.horaFin.message === "string" && <span className="error-message">{errors.horaFin.message}</span>}
+                  <input className="homeOrg-input" type="time" id="horaFin" {...register("horaFin", { required: "La hora de fin es obligatoria" })} />
+                  {errors.horaFin && typeof errors.horaFin.message === "string" && <span className="homeOrg-error">{errors.horaFin.message}</span>}
                 </div>
 
-                <div className="input-group">
+                <div className="homeOrg-input-group">
                   <label htmlFor="precioEntrada">Precio de Entrada:</label>
-                  <input type="text" id="precioEntrada" minLength={1} maxLength={10} {...register("precioEntrada", {
+                  <input className="homeOrg-input" type="text" id="precioEntrada" minLength={1} maxLength={10} {...register("precioEntrada", {
                     required: "El Precio de Entrada es obligatorio",
                     minLength: { value: 1, message: "El Precio de Entrada debe de ser al menos $1." },
                     maxLength: { value: 8, message: "El Precio de Entrada no debe pasar de las 10 cifras" }
                   })} onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()} pattern="[0-9]*" inputMode="numeric" />
-                  {errors.precioEntrada && typeof errors.precioEntrada.message === "string" && <span className="error-message">{errors.precioEntrada.message}</span>}
+                  {errors.precioEntrada && typeof errors.precioEntrada.message === "string" && <span className="homeOrg-error">{errors.precioEntrada.message}</span>}
                 </div>
 
-                <div className="input-group">
+                <div className="homeOrg-input-group">
                   <label htmlFor="cantidadCupos">Cantidad de Cupos:</label>
-                  <input type="text" id="cantidadCupos" minLength={1} maxLength={8} {...register("cantidadCupos", {
+                  <input className="homeOrg-input" type="text" id="cantidadCupos" minLength={1} maxLength={8} {...register("cantidadCupos", {
                     required: "La cantidad de Cupos es obligatoria",
                     minLength: { value: 1, message: "La cantidad de Cupos debe de ser al menos una." },
                     maxLength: { value: 8, message: "La cantidad de Cupos no debe pasar de las 8 cifras" }
                   })} onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()} pattern="[0-9]*" inputMode="numeric" />
-                  {errors.cantidadCupos && typeof errors.cantidadCupos.message === "string" && <span className="error-message">{errors.cantidadCupos.message}</span>}
+                  {errors.cantidadCupos && typeof errors.cantidadCupos.message === "string" && <span className="homeOrg-error">{errors.cantidadCupos.message}</span>}
                 </div>
 
-                <div className="input-group">
+                <div className="homeOrg-input-group">
                   <label htmlFor="edadMinima">Edad Mínima:</label>
-                  <input type="number" id="edadMinima" min={0} max={120} {...register("edadMinima", {
+                  <input className="homeOrg-input" type="number" id="edadMinima" min={0} max={120} {...register("edadMinima", {
                     required: "La edad mínima es obligatoria",
                     min: { value: 0, message: "La edad mínima debe ser al menos 0" },
                     max: { value: 120, message: "La edad mínima no debe superar 120" }
                   })} />
-                  {errors.edadMinima && typeof errors.edadMinima.message === "string" && <span className="error-message">{errors.edadMinima.message}</span>}
+                  {errors.edadMinima && typeof errors.edadMinima.message === "string" && <span className="homeOrg-error">{errors.edadMinima.message}</span>}
                 </div>
 
-                <select id="categoria" {...register("categoria", { required: "La categoría es obligatoria" })}>
+                <select className='homeOrg-select' id="categoria" {...register("categoria", { required: "La categoría es obligatoria" })}>
                   <option value="">Seleccione una categoría</option>
                   {categorias.map(cat => <option key={cat.id} value={cat.id}>{cat.nombre}</option>)}
                 </select>
 
-                <select id="provincia" onChange={e => setProvinciaSeleccionada(Number(e.target.value))}>
+                <select className='homeOrg-select' id="provincia" onChange={e => setProvinciaSeleccionada(Number(e.target.value))}>
                   <option value="">Seleccione una provincia</option>
                   {provincias.map(p => <option key={p.id} value={p.id}>{p.nombre}</option>)}
                 </select>
 
-                <select id="localidad" disabled={!provinciaSeleccionada} {...register("localidad", { required: "Debe seleccionar una localidad" })} onChange={e => setLocalidadSeleccionada(Number(e.target.value))}>
+                <select className='homeOrg-select' id="localidad" disabled={!provinciaSeleccionada} {...register("localidad", { required: "Debe seleccionar una localidad" })} onChange={e => setLocalidadSeleccionada(Number(e.target.value))}>
                   <option value="">Seleccione una localidad</option>
                   {localidades.length ? localidades.map(l => <option key={l.id} value={l.id}>{l.nombre}</option>) : <option value="">No hay localidades disponibles</option>}
                 </select>
 
-                <select id="direccion" disabled={!provinciaSeleccionada} {...register("direccion", { required: "Debe seleccionar una dirección" })}>
+                <select className='homeOrg-select' id="direccion" disabled={!provinciaSeleccionada} {...register("direccion", { required: "Debe seleccionar una dirección" })}>
                   <option value="">Seleccione una dirección</option>
                   {direcciones.length ? direcciones.map(d => <option key={d.id} value={d.id}>{d.calle} al {d.altura}, {d.detalles}</option>) : <option value="">No hay direcciones disponibles</option>}
                 </select>
 
-                <button type="submit" className="btn-creado">Crear Evento</button>
+                <button type="submit" className="homeOrg-btn">Crear Evento</button>
               </form>
             </div>
           </div>

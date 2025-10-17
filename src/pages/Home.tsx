@@ -2,6 +2,7 @@ import './home.css'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function capitalizar(texto: string | undefined) {
     return texto.replace(/\b\w/g, l => l.toUpperCase());
@@ -35,6 +36,22 @@ function Home() {
     const [slideIndex, setSlideIndex] = useState(0);
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('')
     const [busqueda, setBusqueda] = useState('')
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const usuario = localStorage.getItem('usuario')
+        if (usuario) {
+            const tipo = JSON.parse(usuario).tipo
+            if (tipo === 'administrador') {
+                navigate('/administrador')
+            } else if (tipo === 'organizador') {
+                navigate('/misEventos')
+            } else {
+                navigate('/')
+            }
+        }
+    }, [])
 
     useEffect(() => {
     const fetchEventos = async () => {

@@ -35,7 +35,7 @@ function Login() {
             if (tipo === 'administrador') {
                 navigate('/administrador')
             } else if (tipo === 'organizador') {
-                navigate('/organizador')
+                navigate('/misEventos')
             } else {
                 navigate('/')
             }
@@ -53,7 +53,7 @@ function Login() {
             if (tipo === 'administrador') {
                 navigate('/administrador')
             } else if (tipo === 'organizador') {
-                navigate('/organizador')
+                navigate('/misEventos')
             } else {
                 navigate('/')
             }

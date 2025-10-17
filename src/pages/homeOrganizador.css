@@ -1,68 +1,101 @@
-.HomeOrganizador {
+.homeOrg-container {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     align-items: stretch; 
-    padding: 0px;
+    padding: 0;
     margin-top: 20px;
-}
-
-.HomeOrganizador p {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.nuevoEvento-container {
     font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
+}
+
+.homeOrg-form {
+    background-color: #fff;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    margin-bottom: 50px;
-    min-height: 375px;
-    width: 100%;
-    height: 100%;
+    align-items: stretch;
+    margin: 20px auto 50px auto;
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    max-width: 700px;
+    width: 90%;
+    box-sizing: border-box;
 }
 
-.input-group {
+.homeOrg-input-group {
     margin-bottom: 1rem;
     margin-top: 2rem;
-    text-align: left;
     display: flex;
     flex-direction: column;
 }
 
-.input-group label {
+.homeOrg-input-group label {
     font-size: 14px;
     color: #333;
+    font-weight: 600;
+    margin-bottom: 6px;
 }
 
-.input-group .input {
-    width: calc(100% - 1.8rem);
+.homeOrg-input,
+.homeOrg-select {
+    width: 100%;
+    max-width: 100%;
     padding: 0.8rem;
-    margin-top: 0.3rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
     font-size: 16px;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
 }
 
-.btn-creado {
-    margin-top: 1.5rem;
-    margin-bottom: 0.4rem;
-    margin-left: 4.5rem;
-    width: 50%;
+.homeOrg-input:focus,
+.homeOrg-select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.homeOrg-select {
+    margin-bottom: 1.5rem;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.homeOrg-error {
+    color: #d9534f;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+.homeOrg-btn {
+    margin: 1.5rem auto 0 auto; 
     padding: 0.7rem;
     background-color: #007bff;
     color: #fff;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
+    display: block; 
 }
 
-.btn-creado:hover {
+.homeOrg-btn:hover {
     background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    .homeOrg-form {
+        padding: 20px;
+    }
+    .homeOrg-input,
+    .homeOrg-select {
+        font-size: 15px;
+    }
+    .homeOrg-btn {
+        font-size: 15px;
+        width: 70%;
+    }
 }

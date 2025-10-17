@@ -13,8 +13,8 @@
     right: 0;
     z-index: 1000;
     background-image: url('../images/headerwallpaper.jpg');
-    background-size: 100%; /* Ajusta la imagen para cubrir todo el header */
-    background-position: center; /* Centra la imagen */
+    background-size: 100%;
+    background-position: center; 
     height: 65px;
     color: rgb(228, 164, 45);
 }
@@ -27,6 +27,29 @@
   height: 100%;
   padding: 0 3em;
 }
+
+.menu-organizador {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    list-style: none;
+    flex: 1; 
+    text-align: center;
+}
+
+.menu-organizador a {
+  color: rgb(228, 164, 45);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: large;
+}
+
+.menu-organizador a:hover {
+    color: rgb(180, 130, 36);
+    scale: calc(11.5rem);
+}
+
 
 .btn-cerrar-sesion {
     background-color: #ff4d4d;
