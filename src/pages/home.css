@@ -21,7 +21,7 @@ h1, h2 {
     margin-top: 20px;
 }
 
-.evento {
+.evento, .slide {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
@@ -31,7 +31,7 @@ h1, h2 {
     background-color: #fff;
 }
 
-.evento h2 {
+.evento h2, .slide h2 {
     margin-top: 0;
     font-size: 1.5rem;
     margin-bottom: 10px;
@@ -54,7 +54,7 @@ button:hover {
 }
 
 .contenedor-carrusel {
-    width: 94%;
+    width: 98%;
     margin: 0 auto;
     position: relative;
 }
@@ -73,6 +73,7 @@ button:hover {
 .slides {
     display: flex;
     transition: transform 0.5s ease;
+    width: 86%;
 }
 
 .slide {
