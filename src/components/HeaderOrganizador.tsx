@@ -14,7 +14,7 @@ function HeaderOrganizador() {
             <div className='HeaderOrganizador'>                
                 <nav className='navigationOrganizador'>
                     <Link to="/organizador" title="Home" className="logo">
-                        <img src="src/images/mainlogo.png" alt="Logo" width="45"/>
+                        <img src="src/images/mainlogo.png" alt="Logo" width="200"/>
                     </Link>               
                     <div>
                         Este es el header del organizador

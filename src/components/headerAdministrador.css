@@ -4,17 +4,25 @@
     background-color: #659992;
     padding: 6px;
     border: 2.5px solid #000;
+    text-align: center;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000;
+    background-image: url('../images/headerwallpaper.jpg');
+    background-size: 100%; /* Ajusta la imagen para cubrir todo el header */
+    background-position: center; /* Centra la imagen */
+    height: 65px;
+    color: rgb(228, 164, 45);
 }
 
 .navigationAdministrador {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex: 1;
+  height: 100%;
   padding: 0 3em;
 }
 
@@ -29,15 +37,15 @@
 }
 
 .menu-admin a {
-  color: white;
+  color: rgb(228, 164, 45);
   text-decoration: none;
   font-weight: 500;
   font-size: large;
 }
 
 .menu-admin a:hover {
+    color: rgb(180, 130, 36);
     scale: calc(11.5rem);
-    color: #000;
 }
 
 .btn-cerrar-sesion {

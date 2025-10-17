@@ -1,15 +1,15 @@
-
-.HomeOrganizador h2 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
 .HomeOrganizador {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch; 
-    padding: 20px;
+    padding: 0px;
+    margin-top: 20px;
+}
+
+.HomeOrganizador p {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .nuevoEvento-container {

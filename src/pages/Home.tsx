@@ -3,6 +3,10 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { useState, useEffect } from 'react';
 
+function capitalizar(texto: string | undefined) {
+    return texto.replace(/\b\w/g, l => l.toUpperCase());
+}
+
 function formatearFecha(fechaISO: string) { 
     const meses = [
         "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -31,26 +35,6 @@ function Home() {
     const [slideIndex, setSlideIndex] = useState(0);
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('')
     const [busqueda, setBusqueda] = useState('')
-    const [organizadores, setOrganizadores] = useState<any[]>([]);
-
-    useEffect(() => {
-    const fetchOrganizadores = async () => {
-        try {
-            const response = await fetch('http://localhost:3000/api/usuarios');
-            if (!response.ok) throw new Error('Error al cargar organizadores');
-            const data = await response.json();
-            setOrganizadores(Array.isArray(data) ? data : data.data);
-        } catch (error: any) {
-            // Puedes manejar el error si lo deseas
-        }
-    };
-    fetchOrganizadores();
-}, []);
-
-    function obtenerNombreOrganizador(id: number) {
-        const organizador = organizadores.find(o => o.id === id);
-        return organizador ? `${organizador.nombre} ${organizador.apellido}` : `ID ${id}`;
-    }
 
     useEffect(() => {
     const fetchEventos = async () => {
@@ -146,7 +130,7 @@ function Home() {
                     <div className="carrusel">
                         <button onClick={prevSlide} className="flecha-izquierda">&#10094;</button>
                         <div className="contenedor-slide">
-                            <div className="slides" style={{ transform: `translateX(-${slideIndex * 100}%)` }}>
+                            <div className="slides" style={{ transform: `translateX(-${slideIndex * 39}%)` }}>
                                 {eventosDestacados.map((evento) => (
                                     <div key={evento.id} className="slide">
                                         <h2>{evento.nombre}</h2> {}
@@ -157,13 +141,15 @@ function Home() {
                                         <p><strong>Precio de entrada:</strong> ${evento.precioEntrada}</p>
                                         <p><strong>Cupos disponibles:</strong> {evento.cantidadCupos}</p>
                                         <p><strong>Edad mínima:</strong> {evento.edadMinima ? `${evento.edadMinima} años` : 'Sin restricción'}</p>
-                                        <p><strong>Organiza:</strong> {obtenerNombreOrganizador(evento.organizadorId)}</p>
+                                        <p><strong>Organiza:</strong> {" "}
+                                        {evento.organizador ? `${capitalizar(evento.organizador.nombre)} ${capitalizar(evento.organizador.apellido)}` : "Sin organizador"}</p>
+                                        <p><strong>Dirección:</strong> {evento.direccion.calle} {evento.direccion.altura}, {evento.direccion.localidad.nombre}</p>
                                         <button onClick={() => handleCompra(evento)}>Comprar Entrada</button>
                                     </div>
                                 ))}
                             </div>
                         </div>
-                        <button className="flecha-derecha" onClick={nextSlide}>&gt;</button>
+                        <button className="flecha-derecha" onClick={nextSlide}>&#10095;</button>
                     </div>
                 )}
             </div> 
@@ -182,7 +168,10 @@ function Home() {
                     <p><strong>Precio de entrada:</strong> ${evento.precioEntrada}</p>
                     <p><strong>Cupos disponibles:</strong> {evento.cantidadCupos}</p>
                     <p><strong>Edad mínima:</strong> {evento.edadMinima ? `${evento.edadMinima} años` : 'Sin restricción'}</p>
-                    <p><strong>Organiza:</strong> {obtenerNombreOrganizador(evento.organizadorId)}</p>
+                    <p><strong>Organiza:</strong> {" "}
+                    {evento.organizador ? `${capitalizar(evento.organizador.nombre)} 
+                    ${capitalizar(evento.organizador.apellido)}` : "Sin organizador"}</p>
+                    <p><strong>Dirección:</strong> {evento.direccion.calle} {evento.direccion.altura}, {evento.direccion.localidad.nombre}</p>
                     <button onClick={() => handleCompra(evento)}>Comprar Entrada</button>
                 </div>
                 ))}

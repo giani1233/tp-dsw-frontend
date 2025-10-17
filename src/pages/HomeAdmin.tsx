@@ -1,5 +1,6 @@
 import './homeAdmin.css';
 import HeaderAdministrador from "../components/HeaderAdministrador";
+import Footer from "../components/Footer";
 import { useState, useEffect } from 'react';
 import { Evento } from "../types/evento";
 import ProjectCard from '../components/ProjectCard';
@@ -163,6 +164,7 @@ function HomeAdmin() {
                     />
                 </div>
             )}
+        <Footer />
         </>
     )
 }
