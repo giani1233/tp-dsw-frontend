@@ -1,16 +1,28 @@
 import './homeOrganizador.css';
 import HeaderOrganizador from "../components/HeaderOrganizador";
 import Footer from "../components/Footer"
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import { useForm, useWatch} from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { Evento } from "../types/evento";
+import { ClaseEvento } from '../types/claseEvento';
+import { Direccion } from '../types/direccion';
+import { Localidad } from '../types/localidad';
+import { Provincia } from '../types/provincia';
+import { Usuario } from '../types/usuario';
 
 function HomeOrganizador() {
   
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [eventoEditando, setEventoEditando] = useState<Evento | null>(null);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const [categorias, setCategorias] = useState<ClaseEvento[]>([]); 
+  const [provincias, setProvincias] = useState<Provincia[]>([]);
+  const [provinciaSeleccionada, setProvinciaSeleccionada] = useState<number | null>(null);
+  const [localidades, setLocalidades] = useState<Localidad[]>([]);
+  const [localidadSeleccionada, setLocalidadSeleccionada] = useState<number | null>(null);
+  const [direcciones, setDirecciones] = useState<Direccion[]>([]);
+  const [usuario, setUsuario] = useState<Usuario | null>(null);
   const navigate = useNavigate()
   const { register, handleSubmit, watch, formState: { errors }, control } = useForm();
   const [eventoData, setEventoData] = useState<Partial<Evento>>({
@@ -31,116 +43,146 @@ function HomeOrganizador() {
       }
     })
 
-  const onSubmit = async (data: any) => {
-        console.log(data) 
-
-  useEffect(() => {
-    const organizador = localStorage.getItem('usuario');
-    const id = JSON.parse(organizador).id
-    const respuestaEv = async() => {
-    const respuestaE = await fetch(`http://localhost:3000/organizador/${id}`)
-    if (!respuestaE.ok) {
-      throw new Error("Error obteniendo eventos");
-    }
-    const resultado = await respuestaE.json();
-    setEventos(resultado)
-    }})   
-
-
-  const respuestaC = await fetch(`http://localhost:3000/api/eventos`, {
-      method: 'POST',
-      headers: {'Content-Type' : 'application/json'},
-      body: JSON.stringify(eventoData)
-      })
-
-  const resultadoC = await respuestaC.json()
-
-  if (!respuestaC.ok) {
-    throw new Error(resultadoC.message || 'Error en la creación de evento.')}
-    alert('✅ ¡Creación exitosa!')
-
-  const handleSubmit = () => {
-    if (!eventoData.nombre || !eventoData.descripcion || !eventoData.fechaInicio || !eventoData.horaInicio) {
-      alert('Por favor complete todos los campos requeridos');
-      return;
-    }
-    
-    if (eventos) {
-      const eventosActualizados = eventos.map(evento =>
-        evento.nombre === evento.nombre
-          ? {
-              ...eventoEditando,
-              ...eventoData,
-              cuposDisponibles: eventoData.cantidadCupos || 0,
-              organizador: eventoData.organizador
-            } as Evento
-          : evento
-      );
-      setEventos(eventosActualizados);
-    } else {
-      const nuevoEvento: Evento = {
-      id: data.id,
-      nombre: (data.nombre).toLowerCase(),
-      descripcion: data.descripcion,
-      precioEntrada: data.precioEntrada,
-      cantidadCupos: data.cantidadCupos || null,
-      fechaInicio: data.fechaInicio,
-      horaInicio: data.horaInicio,
-      horaFin: data.horaFin,
-      cuposDisponibles: data.cuposDisponibles || null,
-      edadMinima: data.edadMinima || null,
-      claseEvento: data.claseEvento,
-      organizador: data.usuario,
-      direccion: data.direccion,
-      estado: "pendiente",
-      destacado: data.destacado = false
-      };
-      setEventos([...eventos, nuevoEvento]);
-    }
-    resetForm();
-  };
-
-
-  const resetForm = () => {
-    setMostrarFormulario(false);
-    setEventos(null);
-    setEventoData({
-      nombre: '',
-      descripcion: '',
-      precioEntrada: 0,
-      cantidadCupos: 0,
-      fechaInicio: new Date(),
-      horaInicio: new Date(),
-      horaFin: new Date(),
-      edadMinima: 0,
-      direccion: {
-        calle: '',
-        altura: 0,
-        localidad: {
-          nombre: ''
+    useEffect(() => {
+      const cargarUsuario = async () => {
+        const usuarioLocal = localStorage.getItem('usuario');
+        if (!usuarioLocal) return;
+        const usuarioObj = JSON.parse(usuarioLocal);
+        try {
+          const res = await fetch(`http://localhost:3000/api/usuarios/Organizador/${usuarioObj.id}`);
+          if (!res.ok) throw new Error('No se pudo cargar el usuario');
+          const data = await res.json();
+          setUsuario(data.data);
+        } catch (error) {
+          console.error('Error al cargar usuario:', error);
         }
       }
-    });
-  };
 
-  ;
-  };
+      cargarUsuario();
+    }, []);
 
-  const editarEvento = (evento: Evento) => {
-    if (evento.estado === 'pendiente') {
-      setEventoEditando(evento);
-      setEventoData(evento);
-      setMostrarFormulario(true);
+    useEffect(() => {
+        fetch('http://localhost:3000/api/eventos/clases')
+        .then((res) => res.json())
+        .then((resData) => {
+            console.log("Categorías cargadas:", resData.data);
+            setCategorias(resData.data)
+        })
+        .catch((err) => console.error("Error al cargar las categorías:", err))
+    }, [])
+
+    useEffect(() => {
+        fetch('http://localhost:3000/api/provincias')
+        .then((res) => res.json())
+        .then((resData) => {
+            console.log("Provincias cargadas:", resData.data);
+            setProvincias(resData.data)
+        })
+        .catch((err) => console.error("Error al cargar las provincias:", err))
+    }, [])
+
+    useEffect(() => {
+        if (provinciaSeleccionada === null) return;
+        fetch(`http://localhost:3000/api/localidades/provincia/${provinciaSeleccionada}`)
+        .then((res) => res.json())
+        .then((resData) => {
+            console.log("Localidades cargadas:", resData.data);
+            setLocalidades(resData.data)
+        })
+        .catch((err) => console.error("Error al cargar las localidades:", err))
+    }, [provinciaSeleccionada])
+
+    useEffect(() => {
+        if (localidadSeleccionada === null) return;
+        fetch(`http://localhost:3000/api/direcciones/localidad/${localidadSeleccionada}`)
+        .then((res) => res.json())
+        .then((resData) => {
+            console.log("Direcciones cargadas:", resData.data);
+            setDirecciones(resData.data)
+        })
+        .catch((err) => console.error("Error al cargar las direcciones:", err))
+    }, [localidadSeleccionada])
+const resetForm = () => {
+  setMostrarFormulario(false);
+  setEventoData({
+    nombre: '',
+    descripcion: '',
+    precioEntrada: 0,
+    cantidadCupos: 0,
+    fechaInicio: new Date(),
+    horaInicio: new Date(),
+    horaFin: new Date(),
+    edadMinima: 0,
+    direccion: {
+      calle: '',
+      altura: 0,
+      localidad: {
+        nombre: ''
+      }
     }
+  });
+};
+
+
+  const onSubmit = async (data: any) => {
+    try {
+      const fechaInicio = data.fecha ? new Date(data.fecha) : null;
+      const horaInicio = data.horaInicio ? new Date(`1970-01-01T${data.horaInicio}:00`) : null;
+      const horaFin = data.horaFin ? new Date(`1970-01-01T${data.horaFin}:00`) : null;
+      const eventoParaCrear = {
+        ...data,
+        claseEvento: data.categoria,   
+        direccion: data.direccion,      
+        precioEntrada: Number(data.precioEntrada),
+        cantidadCupos: Number(data.cantidadCupos),
+        cuposDisponibles: Number(data.cantidadCupos),
+        edadMinima: Number(data.edadMinima),
+        fechaInicio: fechaInicio,
+        horaInicio: horaInicio,
+        horaFin: horaFin,
+        estado: "pendiente",
+        destacado: false,
+        organizador: usuario ? usuario.id : null
+      };
+      const respuestaC = await fetch(`http://localhost:3000/api/eventos`, {
+        method: 'POST',
+        headers: {'Content-Type' : 'application/json'},
+        body: JSON.stringify(eventoParaCrear)
+      });
+      const resultadoC = await respuestaC.json();
+      if (!respuestaC.ok) {
+        throw new Error(resultadoC.message || 'Error en la creación de evento.');
+      }
+      setEventos([...eventos, resultadoC]);
+      alert('✅ ¡Creación exitosa!');
+      resetForm();
+    } catch (error) {
+      console.error(error);
+      alert('❌ Ocurrió un error al crear el evento.');
+    }
+  };
+
+const editarEvento = (evento: Evento) => {
+  if (evento.estado === 'pendiente') {
+    setEventoEditando(evento);
+    setEventoData({
+      ...evento,
+      direccion: evento.direccion || {
+        calle: '',
+        altura: 0,
+        localidad: { nombre: '' }
+      }
+    });
+    setMostrarFormulario(true);
   }
+};
+
 
   return (
     <>
     <HeaderOrganizador />
       <div className='HomeOrganizador'>
-      <h1><u>Panel de organizador de Eventos</u></h1>
       <main id="organizador-panel">
-          <p>Bienvenido al panel de organizador de eventos. Aquí puedes gestionar tus eventos, ver estadísticas y otras configuraciones relacionadas con tus creaciones.</p>
           <div className= 'nuevoEvento-crear'>
               { <div className="nuevoEvento-container">
                   <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -170,7 +212,7 @@ function HomeOrganizador() {
                           notFuture: (value) => {
                           const date = new Date(value)
                           const today = new Date()
-                          return date <= today || "La fecha de nacimiento no puede ser futura"}}      
+                          return date >= today || "La fecha del evento no puede ser pasada"}}      
                                   })}    
                       />
                       {errors.fecha && typeof errors.fecha.message === "string" &&<span className="error-message">{errors.fecha.message}</span>}
@@ -178,32 +220,24 @@ function HomeOrganizador() {
 
                       <div className="input-group">
                           <label htmlFor="horaInicio">Hora de Inicio:</label>
-                          <input type="text" id="horaInicio" minLength={1} maxLength={8} placeholder='Formato h/m/s: 16:00:00' {...register("horaInicio", {required: "La cantidad de Cupos es obligatoria",
-                                  minLength: {value: 1, message: "La cantidad de Cupos debe de ser al menos una."},
-                                  maxLength: {value: 8, message: "La cantidad de Cupos no debe pasar de las 8 cifras"},})}
-                              onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()} pattern="[0-9]*" inputMode="numeric"
-                      />
+                          <input type="time" id="horaInicio" {...register("horaInicio", {required: "La hora de inicio es obligatoria",})} />
                       {errors.horaInicio && typeof errors.horaInicio.message === "string" &&<span className="error-message">{errors.horaInicio.message}</span>}
                       </div>
 
                       <div className="input-group">
                           <label htmlFor="horaFin">Hora de Fin:</label>
-                          <input type="text" id="horaFin" minLength={1} maxLength={8} placeholder='Formato h/m/s: 22:00:00' {...register("horaFin", {required: "La cantidad de Cupos es obligatoria",
-                                  minLength: {value: 1, message: "La cantidad de Cupos debe de ser al menos una."},
-                                  maxLength: {value: 8, message: "La cantidad de Cupos no debe pasar de las 8 cifras"},})}
-                              onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()} pattern="[0-9]*" inputMode="numeric"
-                      />
+                          <input type="time" id="horaFin" {...register("horaFin", {required: "La hora de fin es obligatoria",})} />
                       {errors.horaFin && typeof errors.horaFin.message === "string" &&<span className="error-message">{errors.horaFin.message}</span>}
                       </div>
 
                       <div className="input-group">
-                          <label htmlFor="edadMinima">Precio de Entrada:</label>
-                          <input type="text" id="edadMinima" minLength={1} maxLength={10} {...register("edadMinima", {required: "El Precio de Entrada es obligatorio",
+                          <label htmlFor="precioEntrada">Precio de Entrada:</label>
+                          <input type="text" id="precioEntrada" minLength={1} maxLength={10} {...register("precioEntrada", {required: "El Precio de Entrada es obligatorio",
                                   minLength: {value: 1, message: "El Precio de Entrada debe de ser al menos $1."},
                                   maxLength: {value: 8, message: "El Precio de Entrada no debe pasar de las 10 cifras"},})}
                               onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()} pattern="[0-9]*" inputMode="numeric"
                       />
-                      {errors.edadMinima && typeof errors.edadMinima.message === "string" &&<span className="error-message">{errors.edadMinima.message}</span>}
+                      {errors.precioEntrada && typeof errors.precioEntrada.message === "string" &&<span className="error-message">{errors.precioEntrada.message}</span>}
                       </div>
 
                       <div className="input-group">
@@ -230,10 +264,44 @@ function HomeOrganizador() {
                           )}
                       </div>
 
+                      <select id="categoria" {...register("categoria", { required: "La categoría es obligatoria" })}>
+                        <option value="">Seleccione una categoría</option>
+                        {categorias.map(cat => (
+                          <option key={cat.id} value={cat.id}>{cat.nombre}</option>
+                        ))}
+                      </select>
+
+                      <select id="provincia" onChange={e => setProvinciaSeleccionada(Number(e.target.value))}>
+                        <option value="">Seleccione una provincia</option>
+                        {provincias.map(p => (
+                          <option key={p.id} value={p.id}>{p.nombre}</option>
+                        ))}
+                      </select>
+
+                      <select
+                        id="localidad"
+                        disabled={!provinciaSeleccionada}
+                        {...register("localidad", { required: "Debe seleccionar una localidad" })}
+                        onChange={(e) => setLocalidadSeleccionada(Number(e.target.value))}
+                      >
+                        <option value="">Seleccione una localidad</option>
+                        {localidades.length
+                          ? localidades.map(l => <option key={l.id} value={l.id}>{l.nombre}</option>)
+                          : <option value="">No hay localidades disponibles</option>
+                        }
+                      </select>
+
+                      <select id="direccion" disabled={!provinciaSeleccionada} {...register("direccion", { required: "Debe seleccionar una dirección" })}>
+                        <option value="">Seleccione una dirección</option>
+                        {direcciones.length
+                          ? direcciones.map(d => <option key={d.id} value={d.id}>{d.calle} al {d.altura}, {d.detalles}</option>)
+                          : <option value="">No hay direcciones disponibles</option>
+                        }
+                      </select>
+
                       <button type="submit" className="btn-creado">Crear Evento</button>
 
                   </form>
-              
               </div> }
           </div>
         <div className='eventoAModificar-container'>
