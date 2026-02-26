@@ -3,6 +3,8 @@ export interface Direccion {
     calle: string;
     altura: number;
     detalles: string;
+    lat?: number | string;
+    lng?: number | string;
     localidad: {
         id: number;
         nombre: string;
