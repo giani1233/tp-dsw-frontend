@@ -7,6 +7,12 @@ interface Category {
     nombre: string;
 }
 
+interface Usuario {
+    id: number;
+    nombre: string;
+    tipo: 'cliente' | 'administrador' | 'organizador';
+}
+
 interface HeaderProps {
     onCategoryChange: (categoria: string) => void;
     onSearch: (busqueda: string) => void;
@@ -49,7 +55,8 @@ function Header({ onCategoryChange, onSearch }: HeaderProps) {
         window.location.href = '/'
     }
 
-    const usuario = localStorage.getItem('usuario')
+    const usuarioStorage = localStorage.getItem('usuario')
+    const usuario: Usuario | null = usuarioStorage ? JSON.parse(usuarioStorage) : null
 
     return (
         <>
@@ -74,6 +81,11 @@ function Header({ onCategoryChange, onSearch }: HeaderProps) {
                             <input type="search" name="search" placeholder="Buscar" value={busqueda} onChange={handleSearchChange} />
                             <input type="submit" value="Ir" />
                         </form>
+                        {usuario?.tipo === 'cliente' && (
+                            <Link to="/misEntradas" className="btn-mis-entradas">
+                                Mis Entradas
+                            </Link>
+                        )}
                         {usuario ? (
                             <button onClick={cerrarSesion} className='btn-cerrar-sesion'>Cerrar sesión</button>
                         ) :

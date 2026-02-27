@@ -1,0 +1,72 @@
+.mis-entradas {
+    width: 95%;
+    margin: auto;
+    padding-top: 10px;
+    padding-bottom: 40px;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.mis-entradas h1 {
+    text-align: center;
+    color: #444;
+    margin-bottom: 20px;
+}
+
+.lista-entradas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+.entrada {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    font-size: 0.9rem;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.entrada:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+.entrada h3 {
+    font-size: 1.1rem;
+    margin: 0 0 6px 0;
+    color: #333;
+}
+
+.entrada p {
+    margin: 3px 0;
+}
+
+.btn-reembolso {
+    margin-top: 10px;
+    background-color: rgb(228, 164, 45);
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    width: 100%;
+}
+
+.btn-reembolso:hover {
+    background-color: rgb(180, 130, 36);
+}
+
+.btn-reembolso:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.sin-entradas {
+    text-align: center;
+    margin-top: 30px;
+    color: #777;
+}
