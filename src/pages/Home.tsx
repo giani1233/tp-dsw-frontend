@@ -183,7 +183,7 @@ function Home() {
                     </div>
                 )}
             </div> 
-            <h2>⭐ Todos los eventos ⭐</h2>
+            <h2>🔰 Todos los eventos 🔰</h2>
             <section className="eventos">
                 {cargando && <p>Cargando...</p>}
                 {error && <p style={{color: 'red'}}>Error: {error}</p>}
@@ -191,7 +191,6 @@ function Home() {
                 {!cargando && !error && eventosFiltrados.map(evento => (
                 <div key={evento.id} className="evento">
                     <h2>{evento.nombre}</h2> {}
-                    <hr />
                     <p className="descripcion">{evento.descripcion}</p>
                     <p><strong>Fecha:</strong> {formatearFecha(evento.fechaInicio)}</p>
                     <p><strong>Hora de inicio:</strong> {formatearHora(evento.horaInicio)}</p>
