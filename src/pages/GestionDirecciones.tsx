@@ -204,13 +204,13 @@ function GestionDirecciones() {
         fetchDirecciones()
     }
 
-    const handleGuardarDireccion = (id:number, nuevaCalle:string, nuevaAltura:number, nuevosDetalles:string) => {
+    const handleGuardarDireccion = (id:number, nuevaCalle:string, nuevaAltura:number, nuevosDetalles:string, lat:number, lng: number) => {
         fetch(`http://localhost:3000/api/direcciones/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ calle: nuevaCalle, altura: nuevaAltura, detalles: nuevosDetalles }),
+            body: JSON.stringify({ calle: nuevaCalle, altura: nuevaAltura, detalles: nuevosDetalles, lat, lng }),
         })
             .then((res) => res.json())
             .then((resData) => {
@@ -249,11 +249,11 @@ function GestionDirecciones() {
         .catch((err) => console.error("Error al agregar la localidad:", err));
     }
 
-    const handleAgregarDireccion = (nuevoCalle: string, nuevoAltura: number, nuevosDetalles: string, localidadId: number) => {
+    const handleAgregarDireccion = (nuevoCalle: string, nuevoAltura: number, nuevosDetalles: string, localidadId: number, lat: number, lng: number) => {
         fetch('http://localhost:3000/api/direcciones', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ calle: nuevoCalle, altura: nuevoAltura, detalles: nuevosDetalles, localidad: localidadId }),
+            body: JSON.stringify({ calle: nuevoCalle, altura: nuevoAltura, detalles: nuevosDetalles, localidad: localidadId, lat, lng }),
         })
         .then((res) => res.json())
         .then(() => {

@@ -1,0 +1,111 @@
+.map-container {
+    height: 250px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    margin-bottom: 4px;
+}
+
+.map-coordenadas {
+    color: #555;
+    font-size: 0.8rem;
+    text-align: left;
+    margin-bottom: 4px;
+}
+
+.map-cargando {
+    color: #888;
+    font-size: 0.8rem;
+    text-align: left;
+    margin-bottom: 4px;
+}
+
+.map-label small {
+    color: #888;
+    font-size: 0.75rem;
+    margin-left: 6px;
+}
+
+.card-add-direccion {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    z-index: 1001;
+    width: 500px;
+    max-width: 95vw;        
+    text-align: center;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.card-add-direccion h2 {
+    margin-bottom: 20px;
+}
+
+.card-add-direccion form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
+}
+
+.card-add-direccion input,
+.card-add-direccion select,
+.card-add-direccion textarea {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.card-add-direccion textarea {
+    resize: vertical;
+    min-height: 70px;
+}
+
+@media (max-width: 600px) {
+    .card-add-direccion {
+        padding: 20px 16px;
+        border-radius: 8px;
+        width: 95vw;
+    }
+
+    .card-add-direccion h2 {
+        font-size: 1.1rem;
+        margin-bottom: 14px;
+    }
+
+    .card-add-direccion input,
+    .card-add-direccion select,
+    .card-add-direccion textarea {
+        font-size: 14px;
+        padding: 7px 10px;
+    }
+
+    .map-container {
+        height: 200px;
+    }
+
+    .map-label small {
+        display: block;  
+        margin-left: 0;
+        margin-top: 2px;
+    }
+}
+
+@media (max-width: 380px) {
+    .card-add-direccion {
+        padding: 16px 12px;
+    }
+
+    .map-container {
+        height: 170px;
+    }
+}
