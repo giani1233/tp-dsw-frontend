@@ -36,6 +36,7 @@ function Home() {
     const [slideIndex, setSlideIndex] = useState(0);
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('')
     const [busqueda, setBusqueda] = useState('')
+    const [errorCompra, setErrorCompra] = useState<{[id: number]: string}>({})
 
     const navigate = useNavigate();
 
@@ -105,6 +106,7 @@ function Home() {
     }
 
     const handleCompra = async (evento: any) => {
+        setErrorCompra(prev => ({ ...prev, [evento.id]: '' }))
         const usuario = JSON.parse(localStorage.getItem('usuario') || null);
         if(!usuario) {
             window.location.href = '/login';
@@ -116,6 +118,12 @@ function Home() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ titulo: evento.nombre, monto: evento.precioEntrada, cantidad: 1, idEvento: evento.id, idUsuario: usuario.id })
             })
+
+            if (!response.ok) {
+                const error = await response.json()
+                setErrorCompra(prev => ({ ...prev, [evento.id]: error.message }))
+                return
+            }
 
             const data = await response.json()
 
@@ -156,11 +164,16 @@ function Home() {
                                         <p><strong>Fecha:</strong> {formatearFecha(evento.fechaInicio)}</p>
                                         <p><strong>Hora de inicio:</strong> {formatearHora(evento.horaInicio)}</p>
                                         <p><strong>Precio de entrada:</strong> ${evento.precioEntrada}</p>
-                                        <p><strong>Cupos disponibles:</strong> {evento.cantidadCupos}</p>
+                                        <p><strong>Cupos disponibles:</strong> {evento.cuposDisponibles}</p>
                                         <p><strong>Edad mínima:</strong> {evento.edadMinima ? `${evento.edadMinima} años` : 'Sin restricción'}</p>
                                         <p><strong>Organiza:</strong> {" "}
                                         {evento.organizador ? `${capitalizar(evento.organizador.nombre)} ${capitalizar(evento.organizador.apellido)}` : "Sin organizador"}</p>
                                         <p><strong>Dirección:</strong> {evento.direccion.calle} {evento.direccion.altura}, {evento.direccion.localidad.nombre}</p>
+                                        {errorCompra[evento.id] && (
+                                            <p style={{ color: 'red', fontWeight: 'bold', marginTop: '8px' }}>
+                                                {errorCompra[evento.id]}
+                                            </p>
+                                        )}
                                         <button onClick={() => handleCompra(evento)}>Comprar Entrada</button>
                                     </div>
                                 ))}
@@ -183,12 +196,17 @@ function Home() {
                     <p><strong>Fecha:</strong> {formatearFecha(evento.fechaInicio)}</p>
                     <p><strong>Hora de inicio:</strong> {formatearHora(evento.horaInicio)}</p>
                     <p><strong>Precio de entrada:</strong> ${evento.precioEntrada}</p>
-                    <p><strong>Cupos disponibles:</strong> {evento.cantidadCupos}</p>
+                    <p><strong>Cupos disponibles:</strong> {evento.cuposDisponibles}</p>
                     <p><strong>Edad mínima:</strong> {evento.edadMinima ? `${evento.edadMinima} años` : 'Sin restricción'}</p>
                     <p><strong>Organiza:</strong> {" "}
                     {evento.organizador ? `${capitalizar(evento.organizador.nombre)} 
                     ${capitalizar(evento.organizador.apellido)}` : "Sin organizador"}</p>
                     <p><strong>Dirección:</strong> {evento.direccion.calle} {evento.direccion.altura}, {evento.direccion.localidad.nombre}</p>
+                    {errorCompra[evento.id] && (
+                        <p style={{ color: 'red', fontWeight: 'bold', marginTop: '8px' }}>
+                            {errorCompra[evento.id]}
+                        </p>
+                    )}
                     <button onClick={() => handleCompra(evento)}>Comprar Entrada</button>
                 </div>
                 ))}
