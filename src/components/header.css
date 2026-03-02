@@ -1,205 +1,146 @@
 .Header {
-    font-size: 10px;
-    font-family: 'Courier New', Courier, monospace;
-    background-color: #659992;
-    padding: 6px;
-    border: 2.5px solid #000;
-    text-align: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    background-image: url('../images/headerwallpaper.jpg');
-    background-size: 100%; /* Ajusta la imagen para cubrir todo el header */
-    background-position: center; /* Centra la imagen */
-    height: 65px;
+  font-family: 'Courier New', Courier, monospace;
+  border: 2.5px solid #000;
+  background-image: url('../images/headerwallpaper.jpg');
+  background-size: cover;
+  background-position: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 10px;
 }
 
 .navigation {
   display: flex;
+  flex-wrap: wrap;               
   align-items: center;
-  justify-content: space-between;
-  flex: 1;
-  height: 100%;
-  padding: 0 3em;
+  justify-content: center;
+  gap: 10px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.logo img {
+  width: 140px;
+  max-width: 40vw;
+  height: auto;
+  display: block;
 }
 
 .search-acc {
   display: flex;
+  flex-wrap: wrap;              
+  justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  width: 100%;
 }
 
-#btnAcceder {
-  display: block;
-  font-size: 17px;
-  text-transform: uppercase;
-  text-decoration: none;
-  color: black;
-  padding: 2px 16px;
-  transition: all 0.25s linear;
-  border-radius: 7px;
-  border: 2px solid #000;
-  background-color: rgb(228, 164, 45);
+.label-categories {
+  color: rgb(228, 164, 45);
+  font-size: 14px;
   white-space: nowrap;
 }
 
-.navigation form {
-  display: flex;
-  align-items: stretch;
-  height: 30px;
-}
-
-.navigation .label-categories {
-  color: rgb(228, 164, 45);
+.select-categories {
   font-size: 14px;
-}
-
-.navigation .select-categories {
-  font-size: 14px;
-  padding: 0 8px;
+  padding: 6px;
   border: 2px solid #000;
   background-color: #fff;
   color: #000;
   border-radius: 5px;
-  width: 15vw;
   cursor: pointer;
+  flex: 1 1 180px;        
+  max-width: 250px;
 }
 
-.navigation .select-categories option {
-  padding: 5px 10px;
-  background-color: #fff; 
-  color: #000;
+.form-busqueda {
+  display: flex;
+  flex: 2 1 260px;
+  max-width: 400px;
+  min-width: 0;
 }
 
-.navigation form input[type="search"] {
+.form-busqueda input[type="search"] {
+  flex: 1;
   font-size: 14px;
-  padding: 0 8px;
+  padding: 6px;
   border: 2px solid #000;
   border-right: none;
   border-radius: 5px 0 0 5px;
-  width: 30vw;
+  min-width: 0;           
 }
 
-.navigation form input[type="submit"] {
+.form-busqueda input[type="submit"] {
   font-size: 14px;
   border: 2px solid #000;
   border-left: none;
   border-radius: 0 5px 5px 0;
   background-color: rgb(197, 207, 209);
   cursor: pointer;
-  padding: 0 8px;
+  padding: 0 10px;
 }
 
-.navigation form input[type="submit"]:hover {
+.form-busqueda input[type="submit"]:hover {
   background-color: rgb(144, 177, 214);
   transition: all 0.25s linear;
 }
 
+#btnAcceder {
+  font-size: 14px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: black;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 2px solid #000;
+  background-color: rgb(228, 164, 45);
+  white-space: nowrap;
+}
+
+#btnAcceder:hover {
+  background-color: rgb(153, 110, 29);
+  transition: all 0.25s linear;
+}
+
 .btn-cerrar-sesion {
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition-duration: 0.4s;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 6px;
+  white-space: nowrap;
 }
 
 .btn-mis-entradas {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition-duration: 0.4s;
+  background-color: #4CAF50;
+  text-decoration: none;
+  color: white;
+  border: none;
+  padding: 7px 13px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  white-space: nowrap;
 }
 
 .btn-mis-entradas:hover {
-    background-color: #327435;
+  background-color: #327435;
 }
 
-@media (max-width: 1060px) {
-  .Header {
-    font-size: 8px;
-    padding: 3px;
-  }
+@media (min-width: 768px) {
   .navigation {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 0 1em;
+    justify-content: space-between;
+    flex-wrap: nowrap; 
   }
-  .navigation .logo { 
-    display: inline-block;
-    margin: 0 auto;
-    width: auto;
-    text-align: center;
-  }
-  .navigation .logo img {
-    width: 32px;
-    height: auto;
-  }
-  .navigation ul {
-    gap: 2px;
-    padding: 0;
-    margin: 0;
-    font-size: 3px;
-    flex-wrap: wrap;
-    justify-content: center;
-    display: flex;
-  }
-  .navigation ul.show {
-    gap: 2px;
-    padding: 0;
-    margin: 0;
-    font-size: 3px;
-    flex-wrap: wrap;
-    justify-content: center;
-    display: flex;
-  }
-  .navigation ul li a, .navigation ul li select  {
-    font-size: 12px;
-    padding: 2px 8px;
-  }
-  .navigation form {
-    margin-top: 5px;
-    margin-bottom: 2px;
-    height: 25px;
-    justify-content: center;
-    width: 100%;
-    display: flex;
-  }
-}
 
-@media (max-width: 420px) {
-  .navigation .menu-icon {
-    display: block;
-    cursor: pointer;
-  }
-  .navigation ul {
-    margin-bottom: 5px;
-    flex-wrap: wrap;
-    justify-content: center;
-    display: none; 
-  }
-  .navigation ul.show {
-    flex-wrap: wrap;
-    justify-content: center;
-    display: block; 
-  }
-  .navigation ul li {
-    margin-bottom: 3px;
+  .search-acc {
+    width: auto;            
+    flex-wrap: nowrap;       
+    justify-content: flex-end;
   }
 }

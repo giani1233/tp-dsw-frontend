@@ -4,6 +4,7 @@ import { useState, useEffect, use } from 'react'
 import { ClaseEvento } from '../types/claseEvento';
 import CategoryCard from '../components/CategoryCard';
 import AddCategoryCard from '../components/AddCategoryCard';
+import Footer from '../components/Footer';
 
 function GestionCategorias() {
     const [categorias, setCategorias] = useState<ClaseEvento[]>([]);
@@ -151,6 +152,7 @@ function GestionCategorias() {
                     />
                 </div>
             )}
+            <Footer />
         </>
     );
 }

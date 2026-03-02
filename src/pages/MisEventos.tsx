@@ -4,10 +4,6 @@ import Footer from '../components/Footer';
 import { useState, useEffect } from 'react';
 import { Usuario } from '../types/usuario';
 
-function capitalizar(texto: string | undefined) {
-    return texto ? texto.replace(/\b\w/g, l => l.toUpperCase()) : '';
-}
-
 function formatearFecha(fechaISO: string) { 
     const meses = [
         "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -18,6 +14,13 @@ function formatearFecha(fechaISO: string) {
     const mes = meses[fecha.getMonth()];
     const anio = fecha.getFullYear();
     return `${dia} de ${mes}, ${anio}`;
+}
+
+function formatearHora(fechaHora: string) { 
+    const fecha = new Date(fechaHora.replace(' ', 'T'));
+    const horas = fecha.getHours().toString().padStart(2, '0');
+    const minutos = fecha.getMinutes().toString().padStart(2, '0');
+    return `${horas}:${minutos}hs`;
 }
 
 function MisEventos() {
@@ -47,27 +50,63 @@ function MisEventos() {
         fetchMisEventos();
     }, []);
 
+    const fecha = new Date();
+    const eventosPendientes = eventos.filter(e => e.estado === 'pendiente');
+    const eventosAprobados = eventos.filter(e => e.estado === 'aprobado' && new Date(e.fechaInicio) >= fecha);
+    const eventosFinalizados = eventos.filter(e => e.estado === 'aprobado' && new Date(e.fechaInicio) < fecha);
+
     return (
         <>
             <HeaderOrganizador />
-            <div className="MisEventos">
-                <h1><u>Mis eventos pendientes</u></h1>
-                {cargando && <p>Cargando...</p>}
-                {error && <p style={{color: 'red'}}>{error}</p>}
-                {!cargando && !error && eventos.length === 0 && <p>No tienes eventos pendientes.</p>}
+            <main className='MisEventos'>
+                <h1><u>Eventos pendientes</u></h1>
+                {eventosPendientes.length === 0 && <p>No tienes eventos pendientes.</p>}
                 <section className="eventos">
-                    {!cargando && !error && eventos.map(evento => (
-                        <div key={evento.id} className="evento">
-                            <h2>{evento.nombre}</h2>
-                            <p><strong>Fecha:</strong> {formatearFecha(evento.fechaInicio)}</p>
-                            <p><strong>Hora de inicio:</strong> {new Date(evento.horaInicio).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p>
-                            <p><strong>Precio de entrada:</strong> ${evento.precioEntrada}</p>
-                            <p><strong>Cupos disponibles:</strong> {evento.cantidadCupos}</p>
-                            <p><strong>Dirección:</strong> {evento.direccion.calle} {evento.direccion.altura}, {evento.direccion.localidad?.nombre}</p>
-                        </div>
-                    ))}
+                {eventosPendientes.map(evento => (
+                    <div key={evento.id} className="evento">
+                        <h2>{evento.nombre}</h2>
+                        <p><strong>Fecha:</strong> {formatearFecha(evento.fechaInicio)}</p>
+                        <p><strong>Hora de inicio:</strong> {formatearHora(evento.horaInicio)}</p>
+                        <p><strong>Hora de fin:</strong> {formatearHora(evento.horaFin)}</p>
+                        <p><strong>Precio de entrada:</strong> ${evento.precioEntrada}</p>
+                        <p><strong>Cupos disponibles:</strong> {evento.cantidadCupos}</p>
+                        <p><strong>Dirección:</strong> {evento.direccion.calle} {evento.direccion.altura}, {evento.direccion.localidad?.nombre}</p>
+                    </div>
+                ))}
                 </section>
-            </div>
+
+                <h1><u>Eventos aprobados</u></h1>
+                {eventosAprobados.length === 0 && <p>No tienes eventos aprobados vigentes.</p>}
+                <section className="eventos">
+                {eventosAprobados.map(evento => (
+                    <div key={evento.id} className="evento">
+                        <h2>{evento.nombre}</h2>
+                        <p><strong>Fecha:</strong> {formatearFecha(evento.fechaInicio)}</p>
+                        <p><strong>Hora de inicio:</strong> {formatearHora(evento.horaInicio)}</p>
+                        <p><strong>Hora de fin:</strong> {formatearHora(evento.horaFin)}</p>
+                        <p><strong>Precio de entrada:</strong> ${evento.precioEntrada}</p>
+                        <p><strong>Cupos disponibles:</strong> {evento.cantidadCupos}</p>
+                        <p><strong>Dirección:</strong> {evento.direccion.calle} {evento.direccion.altura}, {evento.direccion.localidad?.nombre}</p>
+                    </div>
+                ))}
+                </section>
+
+                <h1><u>Eventos finalizados</u></h1>
+                {eventosFinalizados.length === 0 && <p>No tienes eventos finalizados.</p>}
+                <section className="eventos">
+                {eventosFinalizados.map(evento => (
+                    <div key={evento.id} className="evento">
+                        <h2>{evento.nombre}</h2>
+                        <p><strong>Fecha:</strong> {formatearFecha(evento.fechaInicio)}</p>
+                        <p><strong>Hora de inicio:</strong> {formatearHora(evento.horaInicio)}</p>
+                        <p><strong>Hora de fin:</strong> {formatearHora(evento.horaFin)}</p>
+                        <p><strong>Precio de entrada:</strong> ${evento.precioEntrada}</p>
+                        <p><strong>Cupos disponibles:</strong> {evento.cantidadCupos}</p>
+                        <p><strong>Dirección:</strong> {evento.direccion.calle} {evento.direccion.altura}, {evento.direccion.localidad?.nombre}</p>
+                    </div>
+                ))}
+                </section>
+            </main>
             <Footer />
         </>
     );

@@ -10,6 +10,8 @@
     justify-content: flex-start;
     align-items: stretch; 
     padding: 20px;
+    margin-top: -10vh;
+    margin-bottom: 10vh;
 }
 
 #contenedor-busqueda-eventos {
@@ -157,6 +159,10 @@
 
     .botones-card button {
         max-width: 48%;     
+    }
+
+    .HomeAdmin {
+        margin-top: -2vh;
     }
 }
 

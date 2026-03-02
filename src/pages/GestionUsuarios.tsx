@@ -2,6 +2,7 @@ import './gestionUsuarios.css'
 import HeaderAdministrador from "../components/HeaderAdministrador"
 import { useState, useEffect } from 'react'
 import { Usuario } from '../types/usuario';
+import Footer from '../components/Footer';
 
 function GestionUsuarios() {
     const [usuarios, setUsuarios] = useState<Usuario[]>([]);
@@ -96,6 +97,7 @@ function GestionUsuarios() {
                     </table>
                 </div>
             </div>
+            <Footer />
         </>
     );
 }

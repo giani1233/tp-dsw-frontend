@@ -10,6 +10,7 @@ import DireccionCard from '../components/DireccionCard'
 import AddProvinciaCard from '../components/AddProvinciaCard'
 import AddLocalidadCard from '../components/AddLocalidadCard'
 import AddDireccionCard from '../components/AddDireccionCard'
+import Footer from '../components/Footer'
 
 
 function GestionDirecciones() {
@@ -446,6 +447,7 @@ function GestionDirecciones() {
                     />
                 </div>
             )}
+            <Footer />
         </>
     );
 }

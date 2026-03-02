@@ -4,6 +4,8 @@
     flex-direction: column;
     align-items: center; 
     padding: 20px;
+    margin-top: -10vh;
+    margin-bottom: 10vh;
 }
 
 .busqueda-ubicaciones {
@@ -169,6 +171,15 @@
 }
 
 @media (max-width: 768px) {
+
+    .GestionUbicaciones {
+        margin-top: -2vh;
+    }
+
+    .contenedor-tabla-ubicaciones {
+        width: 90%;
+    }
+
     .tabla-ubicaciones {
         font-size: 0.9rem;
     }

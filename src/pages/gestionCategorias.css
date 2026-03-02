@@ -4,6 +4,8 @@
     flex-direction: column;
     align-items: center; 
     padding: 20px;
+    margin-top: -10vh;
+    margin-bottom: 10vh;
 }
 
 .busqueda-categorias {
@@ -149,6 +151,15 @@
 }
 
 @media (max-width: 768px) {
+
+    .GestionCategorias {
+        margin-top: -2vh;
+    }
+
+    .contenedor-tabla-categorias {
+        width: 90%;
+    }
+
     .tabla-categorias {
         font-size: 0.9rem;
     }

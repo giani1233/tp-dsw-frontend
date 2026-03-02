@@ -3,6 +3,7 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import EventsMap from '../components/EventsMap';
 
 function capitalizar(texto: string | undefined) {
     return texto.replace(/\b\w/g, l => l.toUpperCase());
@@ -146,6 +147,7 @@ function Home() {
         />
             <div className='Home'>
             <h1><u>Eventos disponibles a la fecha de: {new Date().toLocaleDateString()}</u></h1>
+            <EventsMap/>
             <h2>🌟 Eventos destacados 🌟</h2>
             <div className="contenedor-carrusel">
                 {cargando && <p>Cargando...</p>}
