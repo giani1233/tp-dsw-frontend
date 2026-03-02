@@ -54,8 +54,9 @@ button:hover {
 }
 
 .contenedor-carrusel {
-    width: 98%;
+    width: 100%;
     margin: 0 auto;
+    overflow: hidden;
     position: relative;
 }
 
@@ -73,14 +74,16 @@ button:hover {
 .slides {
     display: flex;
     transition: transform 0.5s ease;
-    width: 86%;
+    width: 98%;
 }
 
 .slide {
-    min-width: 100%;
+    flex: 0 0 calc(33.33% - 40px);
+    flex-shrink: 0;
+    box-sizing: border-box;
     background: #f8f8f8;
     padding: 1rem;
-    margin: 0 0.5rem;
+    margin: 0 0.4rem;
     border-radius: 8px;
 }
 
@@ -93,8 +96,16 @@ button:hover {
     border-radius: 4px;
 }
 
+.flecha-izquierda {
+    margin-right: 6px;
+}
+
+.flecha-derecha {
+    margin-left: 6px;
+}
+
 .flecha-derecha:hover, .flecha-izquierda:hover {
-    background: #0056b3;
+    background: #6800b3;
 }
 
 @media(min-width: 768px){
