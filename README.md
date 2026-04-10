@@ -75,3 +75,4 @@ export default tseslint.config([
 
    git push
 //
+// Para abrir la aplicacion para hacer los tests: npx cypress open // 
