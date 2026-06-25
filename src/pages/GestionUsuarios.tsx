@@ -8,7 +8,7 @@ function GestionUsuarios() {
     const [usuarios, setUsuarios] = useState<Usuario[]>([]);
 
     const fetchUsuarios = () => {
-        fetch('http://localhost:3000/api/usuarios')
+        fetch('https://tp-dsw-backend-yjx3.onrender.com/api/usuarios')
             .then((res) => res.json())
             .then((resData) => {
                 console.log(resData);

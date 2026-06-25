@@ -24,7 +24,7 @@ function Header({ onCategoryChange, onSearch }: HeaderProps) {
     const [busqueda, setBusqueda] = useState('');
 
     useEffect(() => {
-        fetch('http://localhost:3000/api/eventos/clases')
+        fetch('https://tp-dsw-backend-yjx3.onrender.com/api/eventos/clases')
         .then((res) => res.json())
         .then((resData) => {
             setCategories(resData.data)

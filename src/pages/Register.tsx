@@ -26,7 +26,7 @@ function Register() {
                 empresa: data.empresa || null
             }
 
-            const response = await fetch(`http://localhost:3000/api/usuarios/${data.tipo}`, {
+            const response = await fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/usuarios/${data.tipo}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type' : 'application/json'

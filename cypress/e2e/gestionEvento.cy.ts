@@ -8,8 +8,8 @@ describe('Gestión de Eventos', () => {
   const randomEdad = Math.floor(10 + Math.random() * 90).toString();
   const randomNombre = `Test nombre ${randomString(8)}`;
   const randomDescripcion = `Test descripcion ${randomString(12)}`;
-  const email = 'pablogom@gmail.com';
-  const password = '87654321';
+  const email = 'organizador@gmail.com';
+  const password = 'Gg123123';
   const adminEmail = 'admin@gmail.com';
   const adminPassword = '12345678';
 
@@ -30,7 +30,7 @@ describe('Gestión de Eventos', () => {
     cy.get('[name="categoria"]').select('1');
     cy.get('#provincia').select('1');
     cy.get('[name="localidad"]').select('1');
-    cy.get('[name="direccion"]').select('2');
+    cy.get('[name="direccion"]').select('1');
     cy.get('#organizador-panel button.homeOrg-btn').click();
   })
 

@@ -30,7 +30,7 @@ function MisEntradas() {
 
     useEffect(() => {
 
-        fetch(`http://localhost:3000/api/entradas/cliente/${usuario.id}`)
+        fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/entradas/cliente/${usuario.id}`)
             .then(res => res.json())
             .then(data => setEntradas(data.data))
             .finally(() => setLoading(false));
@@ -39,7 +39,7 @@ function MisEntradas() {
     const solicitarReembolso = async (idEntrada: number) => {
         if (!confirm("Está seguro de que desea reembolsar esta entrada?")) return;
 
-        await fetch(`http://localhost:3000/api/entradas/${idEntrada}/reembolsar`, {
+        await fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/entradas/${idEntrada}/reembolsar`, {
             method: "POST"
         });
 

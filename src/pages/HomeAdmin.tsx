@@ -11,7 +11,7 @@ function HomeAdmin() {
     const [eventosAprobados, setEventosAprobados] = useState<Evento[]>([])
     const [eventoSeleccionado, setEventoSeleccionado] = useState<Evento | null>(null)
     
-    const fetchPendientes = () => {fetch('http://localhost:3000/api/eventos/pendientes')
+    const fetchPendientes = () => {fetch('https://tp-dsw-backend-yjx3.onrender.com/api/eventos/pendientes')
         .then((res) => res.json())
         .then((resData) => { 
             console.log(resData);
@@ -20,7 +20,7 @@ function HomeAdmin() {
         .catch((err) => console.error("Error al cargar los eventos:", err))
     }
 
-    const fetchAprobados = () => {fetch('http://localhost:3000/api/eventos/aprobados')
+    const fetchAprobados = () => {fetch('https://tp-dsw-backend-yjx3.onrender.com/api/eventos/aprobados')
         .then((res) => res.json())
         .then((resData) => { 
             console.log(resData);
@@ -43,7 +43,7 @@ function HomeAdmin() {
     }
 
     const handleAceptar = (id: number) => {
-        fetch(`http://localhost:3000/api/eventos/${id}`, {
+        fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/eventos/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ function HomeAdmin() {
     };
 
     const handleRechazar = (id: number) => {
-        fetch(`http://localhost:3000/api/eventos/${id}`, {
+        fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/eventos/${id}`, {
             method: 'DELETE',
         })
         .then((res) => res.json())
@@ -73,7 +73,7 @@ function HomeAdmin() {
     };
 
     const handleDestacado = (evento: Evento) => {
-        fetch(`http://localhost:3000/api/eventos/${evento.id}`, {
+        fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/eventos/${evento.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -93,8 +93,8 @@ function HomeAdmin() {
     const query = valor.trim() ? `?filtro=${encodeURIComponent(valor)}` : '';
 
     Promise.all([
-        fetch(`http://localhost:3000/api/eventos/pendientes${query}`).then(res => res.json()),
-        fetch(`http://localhost:3000/api/eventos/aprobados${query}`).then(res => res.json())
+        fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/eventos/pendientes${query}`).then(res => res.json()),
+        fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/eventos/aprobados${query}`).then(res => res.json())
     ])
         .then(([pendientesData, aprobadosData]) => {
         setEventosPendientes(pendientesData.data);

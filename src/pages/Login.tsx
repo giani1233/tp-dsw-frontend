@@ -15,7 +15,7 @@ function Login() {
         e.preventDefault();
         setError('');
         try {
-            const response = await fetch('http://localhost:3000/api/autenticacion/login', {
+            const response = await fetch('https://tp-dsw-backend-yjx3.onrender.com/api/autenticacion/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, contrasena })

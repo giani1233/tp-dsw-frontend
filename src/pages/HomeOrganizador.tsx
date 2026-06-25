@@ -44,7 +44,7 @@ function HomeOrganizador() {
       if (!usuarioLocal) return;
       const usuarioObj = JSON.parse(usuarioLocal);
       try {
-        const res = await fetch(`http://localhost:3000/api/usuarios/Organizador/${usuarioObj.id}`);
+        const res = await fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/usuarios/Organizador/${usuarioObj.id}`);
         if (!res.ok) throw new Error('No se pudo cargar el usuario');
         const data = await res.json();
         setUsuario(data.data);
@@ -56,14 +56,14 @@ function HomeOrganizador() {
   }, []);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/eventos/clases')
+    fetch('https://tp-dsw-backend-yjx3.onrender.com/api/eventos/clases')
       .then(res => res.json())
       .then(resData => setCategorias(resData.data))
       .catch(err => console.error("Error al cargar las categorías:", err));
   }, []);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/provincias')
+    fetch('https://tp-dsw-backend-yjx3.onrender.com/api/provincias')
       .then(res => res.json())
       .then(resData => setProvincias(resData.data))
       .catch(err => console.error("Error al cargar las provincias:", err));
@@ -71,7 +71,7 @@ function HomeOrganizador() {
 
   useEffect(() => {
     if (provinciaSeleccionada === null) return;
-    fetch(`http://localhost:3000/api/localidades/provincia/${provinciaSeleccionada}`)
+    fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/localidades/provincia/${provinciaSeleccionada}`)
       .then(res => res.json())
       .then(resData => setLocalidades(resData.data))
       .catch(err => console.error("Error al cargar las localidades:", err));
@@ -79,7 +79,7 @@ function HomeOrganizador() {
 
   useEffect(() => {
     if (localidadSeleccionada === null) return;
-    fetch(`http://localhost:3000/api/direcciones/localidad/${localidadSeleccionada}`)
+    fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/direcciones/localidad/${localidadSeleccionada}`)
       .then(res => res.json())
       .then(resData => setDirecciones(resData.data))
       .catch(err => console.error("Error al cargar las direcciones:", err));

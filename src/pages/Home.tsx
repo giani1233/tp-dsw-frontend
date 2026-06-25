@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import EventsMap from '../components/EventsMap';
 
 function capitalizar(texto: string | undefined) {
+    if (!texto) return '';
     return texto.replace(/\b\w/g, l => l.toUpperCase());
 }
 
@@ -58,7 +59,7 @@ function Home() {
     useEffect(() => {
     const fetchEventos = async () => {
             try {
-                const response = await fetch('http://localhost:3000/api/eventos/aprobados')
+                const response = await fetch('https://tp-dsw-backend-yjx3.onrender.com/api/eventos/aprobados')
                 if (!response.ok) throw new Error('Error al cargar eventos')
                 const data = await response.json()
                 console.log(data)
@@ -71,7 +72,7 @@ function Home() {
         }
     const fetchDestacados = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/eventos/destacados')
+            const response = await fetch('https://tp-dsw-backend-yjx3.onrender.com/api/eventos/destacados')
             if (!response.ok) throw new Error('Error al cargar eventos destacados')
             const data = await response.json()
             console.log(data)
@@ -108,13 +109,13 @@ function Home() {
 
     const handleCompra = async (evento: any) => {
         setErrorCompra(prev => ({ ...prev, [evento.id]: '' }))
-        const usuario = JSON.parse(localStorage.getItem('usuario') || null);
+        const usuario = JSON.parse(localStorage.getItem('usuario') || 'null');
         if(!usuario) {
             window.location.href = '/login';
             return;
         }
         try {
-            const response = await fetch('http://localhost:3000/api/pagos/crear-preferencia', {
+            const response = await fetch('https://tp-dsw-backend-yjx3.onrender.com/api/pagos/crear-preferencia', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ titulo: evento.nombre, monto: evento.precioEntrada, cantidad: 1, idEvento: evento.id, idUsuario: usuario.id })

@@ -12,7 +12,7 @@ function GestionCategorias() {
     const [mostrarAgregar, setMostrarAgregar] = useState(false);
 
     const fetchCategorias = () => {
-        fetch('http://localhost:3000/api/eventos/clases')
+        fetch('https://tp-dsw-backend-yjx3.onrender.com/api/eventos/clases')
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
@@ -26,7 +26,7 @@ function GestionCategorias() {
     }, []);
 
     const handleEliminar = (categoria: ClaseEvento) => {
-            fetch(`http://localhost:3000/api/eventos/clases/${categoria.id}`, {
+            fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/eventos/clases/${categoria.id}`, {
                 method: 'DELETE',
             })
                 .then((res) => {
@@ -44,7 +44,7 @@ function GestionCategorias() {
         if (filtro.trim() === '') {
             fetchCategorias();
         } else {
-            fetch(`http://localhost:3000/api/eventos/clases/filtro?busqueda=${encodeURIComponent(filtro)}`)
+            fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/eventos/clases/filtro?busqueda=${encodeURIComponent(filtro)}`)
                 .then((res) => res.json())
                 .then((resData) => {
                     setCategorias(resData.data);
@@ -63,7 +63,7 @@ function GestionCategorias() {
     }
 
     const handleGuardar = (id:number, nuevoNombre:string) => {
-        fetch(`http://localhost:3000/api/eventos/clases/${id}`, {
+        fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/eventos/clases/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ function GestionCategorias() {
     }
 
     const handleAgregar = (nuevoNombre: string) => {
-        fetch('http://localhost:3000/api/eventos/clases', {
+        fetch('https://tp-dsw-backend-yjx3.onrender.com/api/eventos/clases', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nombre: nuevoNombre }),

@@ -38,7 +38,7 @@ function AddDireccionCard({ onClose, onGuardar }: AddDireccionCardProps) {
     const [cargandoGeo, setCargandoGeo] = useState(false)
 
     useEffect(() => {
-        fetch('http://localhost:3000/api/localidades')
+        fetch('https://tp-dsw-backend-yjx3.onrender.com/api/localidades')
             .then((res) => res.json())
             .then((data) => setLocalidades(data.data))
             .catch((err) => console.error('Error fetching localidades:', err));

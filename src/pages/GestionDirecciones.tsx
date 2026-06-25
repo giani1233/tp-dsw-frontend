@@ -25,7 +25,7 @@ function GestionDirecciones() {
     const [mostrarAgregarDireccion, setMostrarAgregarDireccion] = useState(false);
 
     const fetchProvincias = () => {
-        fetch('http://localhost:3000/api/provincias')
+        fetch('https://tp-dsw-backend-yjx3.onrender.com/api/provincias')
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
@@ -35,7 +35,7 @@ function GestionDirecciones() {
     }
     
     const fetchLocalidades = () => {
-        fetch('http://localhost:3000/api/localidades')
+        fetch('https://tp-dsw-backend-yjx3.onrender.com/api/localidades')
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
@@ -45,7 +45,7 @@ function GestionDirecciones() {
     }
     
     const fetchDirecciones = () => {
-        fetch('http://localhost:3000/api/direcciones')
+        fetch('https://tp-dsw-backend-yjx3.onrender.com/api/direcciones')
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
@@ -61,7 +61,7 @@ function GestionDirecciones() {
     }, []);
 
     const handleEliminarProvincia = (provincia: Provincia) => {
-            fetch(`http://localhost:3000/api/provincias/${provincia.id}`, {
+            fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/provincias/${provincia.id}`, {
                 method: 'DELETE',
             })
                 .then((res) => {
@@ -76,7 +76,7 @@ function GestionDirecciones() {
     };
 
     const handleEliminarLocalidad = (localidad: Localidad) => {
-            fetch(`http://localhost:3000/api/localidades/${localidad.id}`, {
+            fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/localidades/${localidad.id}`, {
                 method: 'DELETE',
             })
                 .then((res) => {
@@ -91,7 +91,7 @@ function GestionDirecciones() {
     };
 
     const handleEliminarDireccion = (direccion: Direccion) => {
-            fetch(`http://localhost:3000/api/direcciones/${direccion.id}`, {
+            fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/direcciones/${direccion.id}`, {
                 method: 'DELETE',
             })
                 .then((res) => {
@@ -109,7 +109,7 @@ function GestionDirecciones() {
         if (filtro.trim() === '') {
             fetchProvincias();
         } else {
-            fetch(`http://localhost:3000/api/provincias/filtro?busqueda=${encodeURIComponent(filtro)}`)
+            fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/provincias/filtro?busqueda=${encodeURIComponent(filtro)}`)
                 .then((res) => res.json())
                 .then((resData) => {
                     setProvincias(resData.data);
@@ -122,7 +122,7 @@ function GestionDirecciones() {
         if (filtro.trim() === '') {
             fetchLocalidades();
         } else {
-            fetch(`http://localhost:3000/api/localidades/filtro?busqueda=${encodeURIComponent(filtro)}`)
+            fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/localidades/filtro?busqueda=${encodeURIComponent(filtro)}`)
                 .then((res) => res.json())
                 .then((resData) => {
                     setLocalidades(resData.data);
@@ -135,7 +135,7 @@ function GestionDirecciones() {
         if (filtro.trim() === '') {
             fetchDirecciones();
         } else {
-            fetch(`http://localhost:3000/api/direcciones/filtro?busqueda=${encodeURIComponent(filtro)}`)
+            fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/direcciones/filtro?busqueda=${encodeURIComponent(filtro)}`)
                 .then((res) => res.json())
                 .then((resData) => {
                     setDirecciones(resData.data);
@@ -154,7 +154,7 @@ function GestionDirecciones() {
     }
 
     const handleGuardarProvincia = (id:number, nuevoNombre:string, nuevoCodigo:string) => {
-        fetch(`http://localhost:3000/api/provincias/${id}`, {
+        fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/provincias/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -180,7 +180,7 @@ function GestionDirecciones() {
     }
 
     const handleGuardarLocalidad = (id:number, nuevoNombre:string, nuevoCodigoPostal:string) => {
-        fetch(`http://localhost:3000/api/localidades/${id}`, {
+        fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/localidades/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -206,7 +206,7 @@ function GestionDirecciones() {
     }
 
     const handleGuardarDireccion = (id:number, nuevaCalle:string, nuevaAltura:number, nuevosDetalles:string, lat:number, lng: number) => {
-        fetch(`http://localhost:3000/api/direcciones/${id}`, {
+        fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/direcciones/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -223,7 +223,7 @@ function GestionDirecciones() {
     }
 
     const handleAgregarProvincia = (nuevoNombre: string, nuevoCodigo: number) => {
-        fetch('http://localhost:3000/api/provincias', {
+        fetch('https://tp-dsw-backend-yjx3.onrender.com/api/provincias', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nombre: nuevoNombre, codigo: nuevoCodigo }),
@@ -237,7 +237,7 @@ function GestionDirecciones() {
     }
 
     const handleAgregarLocalidad = (nuevoNombre: string, nuevoCodigoPostal: number, provinciaId: number) => {
-        fetch('http://localhost:3000/api/localidades', {
+        fetch('https://tp-dsw-backend-yjx3.onrender.com/api/localidades', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nombre: nuevoNombre, codigoPostal: nuevoCodigoPostal, provincia: provinciaId }),
@@ -251,7 +251,7 @@ function GestionDirecciones() {
     }
 
     const handleAgregarDireccion = (nuevoCalle: string, nuevoAltura: number, nuevosDetalles: string, localidadId: number, lat: number, lng: number) => {
-        fetch('http://localhost:3000/api/direcciones', {
+        fetch('https://tp-dsw-backend-yjx3.onrender.com/api/direcciones', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ calle: nuevoCalle, altura: nuevoAltura, detalles: nuevosDetalles, localidad: localidadId, lat, lng }),

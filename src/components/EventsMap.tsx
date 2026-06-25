@@ -58,7 +58,7 @@ function EventsMap() {
     useEffect(() => {
         const fecthMapa = async () => {
             try {
-                const res = await fetch('http://localhost:3000/api/eventos/aprobados-para-mapa')
+                const res = await fetch('https://tp-dsw-backend-yjx3.onrender.com/api/eventos/aprobados-para-mapa')
                 if (!res.ok) {
                     throw new Error('Error al cargar mapa');
                 }

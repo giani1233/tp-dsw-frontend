@@ -5,7 +5,6 @@ describe('Flujo de Administración - Gestión de Provincias', () => {
   const adminEmail = 'admin@gmail.com';
   const adminPassword = '12345678';
 
-  // Esta función centraliza el login para no repetir código
   const login = () => {
     cy.visit('http://localhost:5173/login');
     cy.get('input[name="email"]').type(adminEmail);
@@ -19,7 +18,7 @@ describe('Flujo de Administración - Gestión de Provincias', () => {
   });
 
   it('Sección 2: Navegación al módulo de Ubicaciones', () => {
-    login(); // Reutilizamos la sesión
+    login();
     cy.get('.navigationAdministrador').contains('Ubicaciones').click();
     cy.url().should('include', '/gestionDirecciones');
   });
@@ -27,7 +26,6 @@ describe('Flujo de Administración - Gestión de Provincias', () => {
   it('Sección 3: Apertura y llenado del formulario de Provincia', () => {
     login();
     cy.get('.navigationAdministrador').contains('Ubicaciones').click();
-    
     cy.contains('button', 'Añadir Provincia').click();
     cy.get('.card-add-categoria').within(() => {
       cy.get('input[type="text"]').type(nombreProvinciaTest);
@@ -39,8 +37,6 @@ describe('Flujo de Administración - Gestión de Provincias', () => {
   it('Sección 4: Verificación de persistencia en la tabla', () => {
     login();
     cy.get('.navigationAdministrador').contains('Ubicaciones').click();
-    
-    // Verificamos que la provincia creada en el paso anterior esté allí
     cy.get('table').should('contain', nombreProvinciaTest);
   });
 });

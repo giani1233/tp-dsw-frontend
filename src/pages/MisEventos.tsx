@@ -37,7 +37,7 @@ function MisEventos() {
                 return;
             }
             try {
-                const response = await fetch(`http://localhost:3000/api/eventos/organizador/${usuario.id}`);
+                const response = await fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/eventos/organizador/${usuario.id}`);
                 if (!response.ok) throw new Error('Error al cargar tus eventos');
                 const data = await response.json();
                 setEventos(Array.isArray(data) ? data : data.data);
