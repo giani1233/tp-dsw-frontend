@@ -22,7 +22,7 @@ function GestionUsuarios() {
     }, []);
 
     const handleEliminar = (usuario: Usuario) => {
-        fetch(`http://localhost:3000/api/usuarios/${usuario.tipo}/${usuario.id}`, {
+        fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/usuarios/${usuario.tipo}/${usuario.id}`, {
             method: 'DELETE',
         })
             .then((res) => {
@@ -40,7 +40,7 @@ function GestionUsuarios() {
         if (filtro.trim() === '') {
             fetchUsuarios();
         } else {
-            fetch(`http://localhost:3000/api/usuarios/filtro?busqueda=${encodeURIComponent(filtro)}`)
+            fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/usuarios/filtro?busqueda=${encodeURIComponent(filtro)}`)
                 .then((res) => res.json())
                 .then((resData) => {
                     setUsuarios(resData.data);
