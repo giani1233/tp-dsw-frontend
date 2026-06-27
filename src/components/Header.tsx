@@ -1,4 +1,5 @@
 import './header.css'
+import logo from '../images/mainlogo.png'
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
@@ -63,7 +64,7 @@ function Header({ onCategoryChange, onSearch }: HeaderProps) {
             <div className='Header'>                
                 <nav className='navigation'>
                     <Link to="/" title="Home" className="logo">
-                        <img src="src/images/mainlogo.png" alt="Logo" width="200"/>
+                        <img src={logo} alt="Logo" width="200"/>
                     </Link>               
                     <div className='search-acc'>
                         <label htmlFor="select-categories" className="label-categories">
