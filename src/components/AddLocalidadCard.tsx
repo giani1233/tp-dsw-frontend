@@ -14,7 +14,7 @@ function AddLocalidadCard({ onClose, onGuardar }: AddLocalidadCardProps) {
     const [provincias, setProvincias] = useState<Provincia[]>([])
 
     useEffect(() => {
-        fetch('http://localhost:3000/api/provincias')
+        fetch('https://tp-dsw-backend-yjx3.onrender.com/api/provincias')
             .then((res) => res.json())
             .then((data) => setProvincias(data.data))
             .catch((err) => console.error('Error fetching provincias:', err));
