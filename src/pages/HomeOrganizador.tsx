@@ -123,7 +123,7 @@ function HomeOrganizador() {
         destacado: false,
         organizador: usuario ? usuario.id : null
       };
-      const respuestaC = await fetch(`http://localhost:3000/api/eventos`, {
+      const respuestaC = await fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/eventos`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(eventoParaCrear)
