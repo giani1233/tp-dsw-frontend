@@ -1,4 +1,5 @@
 import './headerOrganizador.css'
+import logo from '../images/mainlogo.png'
 import { Link } from 'react-router-dom'
 
 function HeaderOrganizador() {
@@ -14,7 +15,7 @@ function HeaderOrganizador() {
             <div className='HeaderOrganizador'>                
                 <nav className='navigationOrganizador'>
                     <Link to="/misEventos" title="Home" className="logo">
-                        <img src="src/images/mainlogo.png" alt="Logo" width="200"/>
+                        <img src={logo} alt="Logo" width="200"/>
                     </Link>               
                     <ul className='menu-organizador'>  
                         <li><Link to="/misEventos">Mis Eventos</Link></li>

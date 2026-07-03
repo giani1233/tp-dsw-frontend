@@ -1,4 +1,5 @@
 import './headerAdministrador.css'
+import logo from '../images/mainlogo.png'
 import { Link } from 'react-router-dom'
 
 function HeaderAdministrador() {
@@ -14,7 +15,7 @@ function HeaderAdministrador() {
             <div className='HeaderAdministrador'>                
                 <nav className='navigationAdministrador'>
                     <Link to="/administrador" title="Home" className="logo">
-                        <img src="src/images/mainlogo.png" alt="Logo" width="200"/>
+                        <img src={logo} alt="Logo" width="200"/>
                     </Link>
                     <ul className='menu-admin'>  
                         <li><Link to="/administrador">Eventos</Link></li>
