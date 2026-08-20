@@ -10,247 +10,243 @@ import { Direccion } from '../types/direccion';
 import { Localidad } from '../types/localidad';
 import { Provincia } from '../types/provincia';
 import { Usuario } from '../types/usuario';
+import { useAuth } from '../AuthContext'
+import { fetchConToken } from '../utils/fetchConToken';
 
 function HomeOrganizador() {
-  const [categorias, setCategorias] = useState<ClaseEvento[]>([]);
-  const [provincias, setProvincias] = useState<Provincia[]>([]);
-  const [provinciaSeleccionada, setProvinciaSeleccionada] = useState<number | null>(null);
-  const [localidades, setLocalidades] = useState<Localidad[]>([]);
-  const [localidadSeleccionada, setLocalidadSeleccionada] = useState<number | null>(null);
-  const [direcciones, setDirecciones] = useState<Direccion[]>([]);
-  const [usuario, setUsuario] = useState<Usuario | null>(null);
-  const navigate = useNavigate();
-  const { register, handleSubmit, formState: { errors } } = useForm();
+    const [categorias, setCategorias] = useState<ClaseEvento[]>([]);
+    const [provincias, setProvincias] = useState<Provincia[]>([]);
+    const [provinciaSeleccionada, setProvinciaSeleccionada] = useState<number | null>(null);
+    const [localidades, setLocalidades] = useState<Localidad[]>([]);
+    const [localidadSeleccionada, setLocalidadSeleccionada] = useState<number | null>(null);
+    const [direcciones, setDirecciones] = useState<Direccion[]>([]);
+    const [usuario, setUsuario] = useState<Usuario | null>(null);
+    const [enviando, setEnviando] = useState(false)
+    const [modal, setModal] = useState<{ mensaje: string, tipo: 'exito' | 'error' } | null>(null)
+    const [errorCarga, setErrorCarga] = useState<string | null>(null);
+    const navigate = useNavigate();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
+    const { usuario: usuarioAuth } = useAuth()
 
-  const [eventoData, setEventoData] = useState<Partial<Evento>>({
-    nombre: '',
-    descripcion: '',
-    precioEntrada: 0,
-    cantidadCupos: 0,
-    fechaInicio: new Date(),
-    horaInicio: new Date(),
-    horaFin: new Date(),
-    edadMinima: 0,
-    direccion: {
-      calle: '',
-      altura: 0,
-      localidad: { nombre: '' }
-    }
-  });
+    useEffect(() => {
+        const cargarUsuario = async () => {
+            if (!usuarioAuth) return;
+            try {
+                const res = await fetchConToken(`https://tp-dsw-backend-yjx3.onrender.com/api/usuarios/Organizador/${usuarioAuth.id}`);;
+                if (!res.ok) throw new Error('No se pudo cargar el usuario');
+                const data = await res.json();
+                setUsuario(data.data);
+            } catch (error) {
+                console.error('Error al cargar usuario:', error);
+            }
+        };
+        cargarUsuario();
+    }, [usuarioAuth]);
 
-  useEffect(() => {
-    const cargarUsuario = async () => {
-      const usuarioLocal = localStorage.getItem('usuario');
-      if (!usuarioLocal) return;
-      const usuarioObj = JSON.parse(usuarioLocal);
-      try {
-        const res = await fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/usuarios/Organizador/${usuarioObj.id}`);
-        if (!res.ok) throw new Error('No se pudo cargar el usuario');
-        const data = await res.json();
-        setUsuario(data.data);
-      } catch (error) {
-        console.error('Error al cargar usuario:', error);
-      }
+    useEffect(() => {
+        fetch('https://tp-dsw-backend-yjx3.onrender.com/api/eventos/clases')
+            .then(res => {
+                if (!res.ok) throw new Error()
+                return res.json()
+            })
+            .then(resData => setCategorias(resData.data))
+            .catch(() => setErrorCarga('Error al cargar las categorías'))
+    }, []);
+
+    useEffect(() => {
+        fetch('https://tp-dsw-backend-yjx3.onrender.com/api/provincias')
+            .then(res => {
+                if (!res.ok) throw new Error()
+                return res.json()
+            })
+            .then(resData => setProvincias(resData.data))
+            .catch(() => setErrorCarga('Error al cargar las provincias'))
+    }, []);
+
+    useEffect(() => {
+        if (provinciaSeleccionada === null) return;
+        fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/localidades/provincia/${provinciaSeleccionada}`)
+            .then(res => {
+                if (!res.ok) throw new Error()
+                return res.json()
+            })
+            .then(resData => setLocalidades(resData.data))
+            .catch(() => setErrorCarga('Error al cargar las localidades'))
+    }, [provinciaSeleccionada]);
+
+    useEffect(() => {
+        if (localidadSeleccionada === null) return;
+        fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/direcciones/localidad/${localidadSeleccionada}`)
+            .then(res => {
+                if (!res.ok) throw new Error()
+                return res.json()
+            })
+            .then(resData => setDirecciones(resData.data))
+            .catch(() => setErrorCarga('Error al cargar las direcciones'))
+    }, [localidadSeleccionada]);
+
+    const onSubmit = async (data: any) => {
+        setEnviando(true)
+        try {
+            const fechaInicio = data.fecha ? new Date(data.fecha) : null;
+            const horaInicio = data.horaInicio ? new Date(`1970-01-01T${data.horaInicio}:00`) : null;
+            const horaFin = data.horaFin ? new Date(`1970-01-01T${data.horaFin}:00`) : null;
+            const eventoParaCrear = {
+                ...data,
+                claseEvento: data.categoria,
+                direccion: data.direccion,
+                precioEntrada: Number(data.precioEntrada),
+                cantidadCupos: Number(data.cantidadCupos),
+                cuposDisponibles: Number(data.cantidadCupos),
+                edadMinima: Number(data.edadMinima),
+                fechaInicio,
+                horaInicio,
+                horaFin,
+                estado: "pendiente",
+                destacado: false,
+                organizador: usuario ? usuario.id : null
+            };
+            const respuestaC = await fetchConToken(`https://tp-dsw-backend-yjx3.onrender.com/api/eventos`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(eventoParaCrear)
+            });
+            const resultadoC = await respuestaC.json();
+            if (!respuestaC.ok) throw new Error(resultadoC.message || 'Error en la creación de evento.');
+            reset() 
+            setModal({ mensaje: '¡Evento creado exitosamente! Redirigiendo...', tipo: 'exito' })
+            setTimeout(() => {
+                setModal(null)
+                navigate('/misEventos') 
+            }, 2000)
+        } catch (error) {
+            console.error(error);
+            setModal({ mensaje: 'Ocurrió un error al crear el evento', tipo: 'error' })
+        } finally {
+            setEnviando(false)
+        }
     };
-    cargarUsuario();
-  }, []);
 
-  useEffect(() => {
-    fetch('https://tp-dsw-backend-yjx3.onrender.com/api/eventos/clases')
-      .then(res => res.json())
-      .then(resData => setCategorias(resData.data))
-      .catch(err => console.error("Error al cargar las categorías:", err));
-  }, []);
-
-  useEffect(() => {
-    fetch('https://tp-dsw-backend-yjx3.onrender.com/api/provincias')
-      .then(res => res.json())
-      .then(resData => setProvincias(resData.data))
-      .catch(err => console.error("Error al cargar las provincias:", err));
-  }, []);
-
-  useEffect(() => {
-    if (provinciaSeleccionada === null) return;
-    fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/localidades/provincia/${provinciaSeleccionada}`)
-      .then(res => res.json())
-      .then(resData => setLocalidades(resData.data))
-      .catch(err => console.error("Error al cargar las localidades:", err));
-  }, [provinciaSeleccionada]);
-
-  useEffect(() => {
-    if (localidadSeleccionada === null) return;
-    fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/direcciones/localidad/${localidadSeleccionada}`)
-      .then(res => res.json())
-      .then(resData => setDirecciones(resData.data))
-      .catch(err => console.error("Error al cargar las direcciones:", err));
-  }, [localidadSeleccionada]);
-
-  const resetForm = () => {
-    setEventoData({
-      nombre: '',
-      descripcion: '',
-      precioEntrada: 0,
-      cantidadCupos: 0,
-      fechaInicio: new Date(),
-      horaInicio: new Date(),
-      horaFin: new Date(),
-      edadMinima: 0,
-      direccion: {
-        calle: '',
-        altura: 0,
-        localidad: { nombre: '' }
-      }
-    });
-  };
-
-  const onSubmit = async (data: any) => {
-    try {
-      const fechaInicio = data.fecha ? new Date(data.fecha) : null;
-      const horaInicio = data.horaInicio ? new Date(`1970-01-01T${data.horaInicio}:00`) : null;
-      const horaFin = data.horaFin ? new Date(`1970-01-01T${data.horaFin}:00`) : null;
-      const eventoParaCrear = {
-        ...data,
-        claseEvento: data.categoria,
-        direccion: data.direccion,
-        precioEntrada: Number(data.precioEntrada),
-        cantidadCupos: Number(data.cantidadCupos),
-        cuposDisponibles: Number(data.cantidadCupos),
-        edadMinima: Number(data.edadMinima),
-        fechaInicio,
-        horaInicio,
-        horaFin,
-        estado: "pendiente",
-        destacado: false,
-        organizador: usuario ? usuario.id : null
-      };
-      const respuestaC = await fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/eventos`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(eventoParaCrear)
-      });
-      const resultadoC = await respuestaC.json();
-      if (!respuestaC.ok) throw new Error(resultadoC.message || 'Error en la creación de evento.');
-      alert('✅ ¡Creación exitosa!');
-      resetForm()
-    } catch (error) {
-      console.error(error);
-      alert('❌ Ocurrió un error al crear el evento.');
-    }
-  };
-
-  return (
-    <>
-      <HeaderOrganizador />
-      <div className='HomeOrganizador'>
-        <main id="organizador-panel">
-          <div className='nuevoEvento-crear'>
-            <div className="homeOrg-form">
-              <form onSubmit={handleSubmit(onSubmit)} noValidate>
-                <div className="homeOrg-input-group">
-                  <label htmlFor="nombre">Nombre:</label>
-                  <input className="homeOrg-input" type="text" id="nombre" {...register("nombre", {
-                    required: "El nombre es obligatorio",
-                    pattern: { value: /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s]+$/, message: "El nombre solo puede contener letras" }
-                  })} />
-                  {errors.nombre && typeof errors.nombre.message === "string" && <span className="homeOrg-error">{errors.nombre.message}</span>}
-                </div>
-
-                <div className="homeOrg-input-group">
-                  <label htmlFor="descripcion">Descripción:</label>
-                  <input className="homeOrg-input" type="text" id="descripcion" minLength={20} maxLength={500} {...register("descripcion", {
-                    required: "La descripción es obligatoria",
-                    minLength: { value: 20, message: "La descripción debe tener al menos 20 caracteres." },
-                    maxLength: { value: 500, message: "La descripción no debe sobrepasar los 500 caracteres" }
-                  })} />
-                  {errors.descripcion && typeof errors.descripcion.message === "string" && <span className="homeOrg-error">{errors.descripcion.message}</span>}
-                </div>
-
-                <div className="homeOrg-input-group">
-                  <label htmlFor="fecha">Fecha:</label>
-                  <input className="homeOrg-input" type="date" id="fecha" {...register("fecha", {
-                    required: "La fecha del Evento es obligatoria",
-                    validate: {
-                      notFuture: (value) => {
-                        const date = new Date(value);
-                        const today = new Date();
-                        return date >= today || "La fecha del evento no puede ser pasada";
-                      }
-                    }
-                  })} />
-                  {errors.fecha && typeof errors.fecha.message === "string" && <span className="homeOrg-error">{errors.fecha.message}</span>}
-                </div>
-
-                <div className="homeOrg-input-group">
-                  <label htmlFor="horaInicio">Hora de Inicio:</label>
-                  <input className="homeOrg-input" type="time" id="horaInicio" {...register("horaInicio", { required: "La hora de inicio es obligatoria" })} />
-                  {errors.horaInicio && typeof errors.horaInicio.message === "string" && <span className="homeOrg-error">{errors.horaInicio.message}</span>}
-                </div>
-
-                <div className="homeOrg-input-group">
-                  <label htmlFor="horaFin">Hora de Fin:</label>
-                  <input className="homeOrg-input" type="time" id="horaFin" {...register("horaFin", { required: "La hora de fin es obligatoria" })} />
-                  {errors.horaFin && typeof errors.horaFin.message === "string" && <span className="homeOrg-error">{errors.horaFin.message}</span>}
-                </div>
-
-                <div className="homeOrg-input-group">
-                  <label htmlFor="precioEntrada">Precio de Entrada:</label>
-                  <input className="homeOrg-input" type="text" id="precioEntrada" minLength={1} maxLength={10} {...register("precioEntrada", {
-                    required: "El Precio de Entrada es obligatorio",
-                    minLength: { value: 1, message: "El Precio de Entrada debe de ser al menos $1." },
-                    maxLength: { value: 8, message: "El Precio de Entrada no debe pasar de las 10 cifras" }
-                  })} onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()} pattern="[0-9]*" inputMode="numeric" />
-                  {errors.precioEntrada && typeof errors.precioEntrada.message === "string" && <span className="homeOrg-error">{errors.precioEntrada.message}</span>}
-                </div>
-
-                <div className="homeOrg-input-group">
-                  <label htmlFor="cantidadCupos">Cantidad de Cupos:</label>
-                  <input className="homeOrg-input" type="text" id="cantidadCupos" minLength={1} maxLength={8} {...register("cantidadCupos", {
-                    required: "La cantidad de Cupos es obligatoria",
-                    minLength: { value: 1, message: "La cantidad de Cupos debe de ser al menos una." },
-                    maxLength: { value: 8, message: "La cantidad de Cupos no debe pasar de las 8 cifras" }
-                  })} onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()} pattern="[0-9]*" inputMode="numeric" />
-                  {errors.cantidadCupos && typeof errors.cantidadCupos.message === "string" && <span className="homeOrg-error">{errors.cantidadCupos.message}</span>}
-                </div>
-
-                <div className="homeOrg-input-group">
-                  <label htmlFor="edadMinima">Edad Mínima:</label>
-                  <input className="homeOrg-input" type="number" id="edadMinima" min={0} max={120} {...register("edadMinima", {
-                    required: "La edad mínima es obligatoria",
-                    min: { value: 0, message: "La edad mínima debe ser al menos 0" },
-                    max: { value: 120, message: "La edad mínima no debe superar 120" }
-                  })} />
-                  {errors.edadMinima && typeof errors.edadMinima.message === "string" && <span className="homeOrg-error">{errors.edadMinima.message}</span>}
-                </div>
-
-                <select className='homeOrg-select' id="categoria" {...register("categoria", { required: "La categoría es obligatoria" })}>
-                  <option value="">Seleccione una categoría</option>
-                  {categorias.map(cat => <option key={cat.id} value={cat.id}>{cat.nombre}</option>)}
-                </select>
-
-                <select className='homeOrg-select' id="provincia" onChange={e => setProvinciaSeleccionada(Number(e.target.value))}>
-                  <option value="">Seleccione una provincia</option>
-                  {provincias.map(p => <option key={p.id} value={p.id}>{p.nombre}</option>)}
-                </select>
-
-                <select className='homeOrg-select' id="localidad" disabled={!provinciaSeleccionada} {...register("localidad", { required: "Debe seleccionar una localidad" })} onChange={e => setLocalidadSeleccionada(Number(e.target.value))}>
-                  <option value="">Seleccione una localidad</option>
-                  {localidades.length ? localidades.map(l => <option key={l.id} value={l.id}>{l.nombre}</option>) : <option value="">No hay localidades disponibles</option>}
-                </select>
-
-                <select className='homeOrg-select' id="direccion" disabled={!provinciaSeleccionada} {...register("direccion", { required: "Debe seleccionar una dirección" })}>
-                  <option value="">Seleccione una dirección</option>
-                  {direcciones.length ? direcciones.map(d => <option key={d.id} value={d.id}>{d.calle} al {d.altura}, {d.detalles}</option>) : <option value="">No hay direcciones disponibles</option>}
-                </select>
-
-                <button type="submit" className="homeOrg-btn">Crear Evento</button>
-              </form>
+    return (
+        <>
+            <HeaderOrganizador />
+            <div className='HomeOrganizador'>
+                <main id="organizador-panel">
+                    <div className='nuevoEvento-crear'>
+                        <div className="homeOrg-form">
+                            {errorCarga && (
+                                <p style={{ color: 'red', textAlign: 'center', marginBottom: '10px' }}>
+                                    {errorCarga}
+                                </p>
+                            )}
+                            <form onSubmit={handleSubmit(onSubmit)} noValidate>
+                                <div className="homeOrg-input-group">
+                                    <label htmlFor="nombre">Nombre:</label>
+                                    <input className="homeOrg-input" type="text" id="nombre" {...register("nombre", {
+                                        required: "El nombre es obligatorio",
+                                        pattern: { value: /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s]+$/, message: "El nombre solo puede contener letras" }
+                                    })} />
+                                    {errors.nombre && typeof errors.nombre.message === "string" && <span className="homeOrg-error">{errors.nombre.message}</span>}
+                                </div>
+                                <div className="homeOrg-input-group">
+                                    <label htmlFor="descripcion">Descripción:</label>
+                                    <input className="homeOrg-input" type="text" id="descripcion" minLength={20} maxLength={500} {...register("descripcion", {
+                                        required: "La descripción es obligatoria",
+                                        minLength: { value: 20, message: "La descripción debe tener al menos 20 caracteres." },
+                                        maxLength: { value: 500, message: "La descripción no debe sobrepasar los 500 caracteres" }
+                                    })} />
+                                    {errors.descripcion && typeof errors.descripcion.message === "string" && <span className="homeOrg-error">{errors.descripcion.message}</span>}
+                                </div>
+                                <div className="homeOrg-input-group">
+                                    <label htmlFor="fecha">Fecha:</label>
+                                    <input className="homeOrg-input" type="date" id="fecha" {...register("fecha", {
+                                        required: "La fecha del Evento es obligatoria",
+                                        validate: {
+                                            notFuture: (value) => {
+                                                const date = new Date(value);
+                                                const today = new Date();
+                                                return date >= today || "La fecha del evento no puede ser pasada";
+                                            }
+                                        }
+                                    })} />
+                                    {errors.fecha && typeof errors.fecha.message === "string" && <span className="homeOrg-error">{errors.fecha.message}</span>}
+                                </div>
+                                <div className="homeOrg-input-group">
+                                    <label htmlFor="horaInicio">Hora de Inicio:</label>
+                                    <input className="homeOrg-input" type="time" id="horaInicio" {...register("horaInicio", { required: "La hora de inicio es obligatoria" })} />
+                                    {errors.horaInicio && typeof errors.horaInicio.message === "string" && <span className="homeOrg-error">{errors.horaInicio.message}</span>}
+                                </div>
+                                <div className="homeOrg-input-group">
+                                    <label htmlFor="horaFin">Hora de Fin:</label>
+                                    <input className="homeOrg-input" type="time" id="horaFin" {...register("horaFin", { required: "La hora de fin es obligatoria" })} />
+                                    {errors.horaFin && typeof errors.horaFin.message === "string" && <span className="homeOrg-error">{errors.horaFin.message}</span>}
+                                </div>
+                                <div className="homeOrg-input-group">
+                                    <label htmlFor="precioEntrada">Precio de Entrada:</label>
+                                    <input className="homeOrg-input" type="text" id="precioEntrada" {...register("precioEntrada", {
+                                        required: "El Precio de Entrada es obligatorio",
+                                        minLength: { value: 1, message: "El Precio de Entrada debe de ser al menos $1." },
+                                        maxLength: { value: 8, message: "El Precio de Entrada no debe pasar de las 10 cifras" }
+                                    })} onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()} pattern="[0-9]*" inputMode="numeric" />
+                                    {errors.precioEntrada && typeof errors.precioEntrada.message === "string" && <span className="homeOrg-error">{errors.precioEntrada.message}</span>}
+                                </div>
+                                <div className="homeOrg-input-group">
+                                    <label htmlFor="cantidadCupos">Cantidad de Cupos:</label>
+                                    <input className="homeOrg-input" type="text" id="cantidadCupos" {...register("cantidadCupos", {
+                                        required: "La cantidad de Cupos es obligatoria",
+                                        minLength: { value: 1, message: "La cantidad de Cupos debe de ser al menos una." },
+                                        maxLength: { value: 8, message: "La cantidad de Cupos no debe pasar de las 8 cifras" }
+                                    })} onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()} pattern="[0-9]*" inputMode="numeric" />
+                                    {errors.cantidadCupos && typeof errors.cantidadCupos.message === "string" && <span className="homeOrg-error">{errors.cantidadCupos.message}</span>}
+                                </div>
+                                <div className="homeOrg-input-group">
+                                    <label htmlFor="edadMinima">Edad Mínima:</label>
+                                    <input className="homeOrg-input" type="number" id="edadMinima" min={0} max={120} {...register("edadMinima", {
+                                        required: "La edad mínima es obligatoria",
+                                        min: { value: 0, message: "La edad mínima debe ser al menos 0" },
+                                        max: { value: 120, message: "La edad mínima no debe superar 120" }
+                                    })} />
+                                    {errors.edadMinima && typeof errors.edadMinima.message === "string" && <span className="homeOrg-error">{errors.edadMinima.message}</span>}
+                                </div>
+                                <select className='homeOrg-select' id="categoria" {...register("categoria", { required: "La categoría es obligatoria" })}>
+                                    <option value="">Seleccione una categoría</option>
+                                    {categorias.map(cat => <option key={cat.id} value={cat.id}>{cat.nombre}</option>)}
+                                </select>
+                                <select className='homeOrg-select' id="provincia" onChange={e => setProvinciaSeleccionada(Number(e.target.value))}>
+                                    <option value="">Seleccione una provincia</option>
+                                    {provincias.map(p => <option key={p.id} value={p.id}>{p.nombre}</option>)}
+                                </select>
+                                <select className='homeOrg-select' id="localidad" disabled={!provinciaSeleccionada} {...register("localidad", { required: "Debe seleccionar una localidad" })} onChange={e => setLocalidadSeleccionada(Number(e.target.value))}>
+                                    <option value="">Seleccione una localidad</option>
+                                    {localidades.length ? localidades.map(l => <option key={l.id} value={l.id}>{l.nombre}</option>) : <option value="">No hay localidades disponibles</option>}
+                                </select>
+                                <select className='homeOrg-select' id="direccion" disabled={!provinciaSeleccionada} {...register("direccion", { required: "Debe seleccionar una dirección" })}>
+                                    <option value="">Seleccione una dirección</option>
+                                    {direcciones.length ? direcciones.map(d => <option key={d.id} value={d.id}>{d.calle} al {d.altura}, {d.detalles}</option>) : <option value="">No hay direcciones disponibles</option>}
+                                </select>
+                                <button type="submit" className="homeOrg-btn" disabled={enviando}>
+                                    {enviando ? 'Creando evento...' : 'Crear Evento'}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </main>
             </div>
-          </div>
-        </main>
-      </div>
-      <Footer />
-    </>
-  );
+            {modal && (
+                <div className="overlay">
+                    <div className="modal-feedback">
+                        <p className={modal.tipo === 'exito' ? 'modal-exito' : 'modal-error'}>
+                            {modal.tipo === 'exito' ? '✅' : '❌'} {modal.mensaje}
+                        </p>
+                        {modal.tipo === 'error' && (
+                            <button onClick={() => setModal(null)}>Cerrar</button>
+                        )}
+                    </div>
+                </div>
+            )}
+            <Footer />
+        </>
+    );
 }
 
 export default HomeOrganizador;

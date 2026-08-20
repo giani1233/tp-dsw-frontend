@@ -127,6 +127,37 @@
     background-color: #0056b3;
 }
 
+.modal-feedback {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    text-align: center;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal-exito {
+    color: #2e7d32;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.modal-error {
+    color: #c62828;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.loading-msg {
+    text-align: center;
+    color: #666;
+    font-size: 1rem;
+    margin-top: 20px;
+}
+
 @media (max-width: 800px) {
     .lista-eventos {
         gap: 3vw;

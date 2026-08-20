@@ -3,50 +3,72 @@ import HeaderAdministrador from "../components/HeaderAdministrador"
 import { useState, useEffect } from 'react'
 import { Usuario } from '../types/usuario';
 import Footer from '../components/Footer';
+import { fetchConToken } from '../utils/fetchConToken';
 
 function GestionUsuarios() {
     const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+    const [cargando, setCargando] = useState(true);
+    const [procesando, setProcesando] = useState<number | null>(null);
+    const [modal, setModal] = useState<{ mensaje: string; tipo: 'exito' | 'error' } | null>(null);
+    const [confirmacion, setConfirmacion] = useState<{mensaje: string, onConfirmar: () => void} | null>(null);
+    const [errorCarga, setErrorCarga] = useState<string | null>(null);
 
     const fetchUsuarios = () => {
-        fetch('https://tp-dsw-backend-yjx3.onrender.com/api/usuarios')
-            .then((res) => res.json())
-            .then((resData) => {
-                console.log(resData);
-                setUsuarios(resData.data);
+        setErrorCarga(null);
+        return fetchConToken('https://tp-dsw-backend-yjx3.onrender.com/api/usuarios')
+            .then(res => {
+                if (!res.ok) throw new Error('Error al cargar los usuarios')
+                return res.json()
             })
-            .catch((err) => console.error("Error al cargar los usuarios:", err));
+            .then((resData) => setUsuarios(resData.data))
+            .catch(err => {
+                console.error(err)
+                setErrorCarga('No se pudieron cargar los usuarios')
+            })
     };
 
     useEffect(() => {
-        fetchUsuarios();
+        setCargando(true);
+        fetchUsuarios().finally(() => setCargando(false));
     }, []);
 
     const handleEliminar = (usuario: Usuario) => {
-        fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/usuarios/${usuario.tipo}/${usuario.id}`, {
-            method: 'DELETE',
+        setConfirmacion({
+            mensaje: `Está seguro de que desea eliminar al usuario ${usuario.nombre} ${usuario.apellido}?`,
+            onConfirmar: () => {
+                setConfirmacion(null);
+                setProcesando(usuario.id);
+                fetchConToken(`https://tp-dsw-backend-yjx3.onrender.com/api/usuarios/${usuario.tipo}/${usuario.id}`, {
+                    method: 'DELETE',
+                })
+                .then(res => {
+                    if (res.ok) {
+                        fetchUsuarios();
+                        setModal({ mensaje: "Usuario eliminado correctamente", tipo: 'exito' });
+                    } else {
+                        setModal({ mensaje: "Error al eliminar el usuario", tipo: 'error' });
+                    }
+                })
+                .catch(() => setModal({ mensaje: "Error al eliminar el usuario", tipo: 'error' }))
+                .finally(() => setProcesando(null));
+            }
         })
-            .then((res) => {
-                if (res.ok) {
-                    console.log("Usuario eliminado con éxito");
-                    fetchUsuarios();
-                } else {
-                    console.error("Error al eliminar el usuario");
-                }
-            })
-            .catch((err) => console.error("Error al eliminar el usuario:", err));
     }; 
     
     const handleFiltro = (filtro: string) => {
-        if (filtro.trim() === '') {
-            fetchUsuarios();
-        } else {
-            fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/usuarios/filtro?busqueda=${encodeURIComponent(filtro)}`)
-                .then((res) => res.json())
-                .then((resData) => {
-                    setUsuarios(resData.data);
-                })
-                .catch((err) => console.error("Error al filtrar los usuarios:", err));
-        }
+        const url = filtro.trim() === '' ? 'https://tp-dsw-backend-yjx3.onrender.com/api/usuarios' : `https://tp-dsw-backend-yjx3.onrender.com/api/usuarios/filtro?busqueda=${encodeURIComponent(filtro)}`;
+        setCargando(true);
+        fetchConToken(url)
+            .then(res => {
+                if (!res.ok) throw new Error('Error al cargar los usuarios')
+                return res.json()
+            })
+            .then(resData => setUsuarios(resData.data))
+            .catch(err => {
+                console.error(err)
+                setErrorCarga('No se pudieron cargar los usuarios')
+            })
+            .finally(() => setCargando(false));
     };
 
     return (
@@ -60,43 +82,71 @@ function GestionUsuarios() {
                     className="busqueda-usuarios"
                     onChange={(e) => handleFiltro(e.target.value)}
                 />
-                <div className="contenedor-tabla-usuarios">
-                    <table className="tabla-usuarios">
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th>Email</th>
-                                <th>Teléfono</th>
-                                <th>Fecha de nacimiento</th>
-                                <th>Empresa</th>
-                                <th>Rol</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {usuarios.map((usuario) => (
-                                <tr key={usuario.id}>
-                                    <td>{usuario.nombre}</td>
-                                    <td>{usuario.apellido}</td>
-                                    <td>{usuario.email}</td>
-                                    <td>{usuario.telefono}</td>
-                                    <td>
-                                        {usuario.fechaNacimiento
-                                            ? new Date(usuario.fechaNacimiento).toLocaleDateString('es-AR')
-                                            : ''}
-                                    </td>
-                                    <td>{usuario.empresa}</td>
-                                    <td>{usuario.tipo}</td>
-                                    <td>
-                                        <button onClick={() => handleEliminar(usuario)}>Eliminar</button>
-                                    </td>
+                {cargando ? (
+                    <p className="loading-msg">Cargando usuarios...</p>
+                ) : 
+                errorCarga ? (
+                    <p style={{ color: 'red', textAlign: 'center' }}>{errorCarga}</p>
+                ) : (
+                    <div className="contenedor-tabla-usuarios">
+                        <table className="tabla-usuarios">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>Email</th>
+                                    <th>Teléfono</th>
+                                    <th>Fecha de nacimiento</th>
+                                    <th>Empresa</th>
+                                    <th>Rol</th>
+                                    <th></th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
+                            <tbody>
+                                {usuarios.map((usuario) => (
+                                    <tr key={usuario.id}>
+                                        <td>{usuario.nombre}</td>
+                                        <td>{usuario.apellido}</td>
+                                        <td>{usuario.email}</td>
+                                        <td>{usuario.telefono}</td>
+                                        <td>
+                                            {usuario.fechaNacimiento
+                                                ? new Date(usuario.fechaNacimiento).toLocaleDateString('es-AR')
+                                                : ''}
+                                        </td>
+                                        <td>{usuario.empresa}</td>
+                                        <td>{usuario.tipo}</td>
+                                        <td>
+                                            <button onClick={() => handleEliminar(usuario)} disabled={procesando === usuario.id}>{procesando === usuario.id ? 'Eliminando...' : 'Eliminar'}</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
             </div>
+            {modal && (
+                <div className="overlay">
+                    <div className="modal-feedback">
+                        <p className={modal.tipo === 'exito' ? 'modal-exito' : 'modal-error'}>
+                            {modal.tipo === 'exito' ? '✅' : '❌'} {modal.mensaje}
+                        </p>
+                        <button onClick={() => setModal(null)}>Cerrar</button>
+                    </div>
+                </div>
+            )}
+            {confirmacion && (
+                <div className="overlay">
+                    <div className="modal-feedback">
+                        <p>{confirmacion.mensaje}</p>
+                        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                            <button onClick={confirmacion.onConfirmar} id="aceptar-evento">Confirmar</button>
+                            <button onClick={() => setConfirmacion(null)} id="rechazar-evento">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
             <Footer />
         </>
     );

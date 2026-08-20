@@ -2,6 +2,7 @@ import './header.css'
 import logo from '../images/mainlogo.png'
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { useAuth } from '../AuthContext' 
 
 interface Category {
     id: number;
@@ -23,6 +24,7 @@ function Header({ onCategoryChange, onSearch }: HeaderProps) {
     const [categories, setCategories] = useState<Category[]>([])
     const [option, setOption] = useState('');
     const [busqueda, setBusqueda] = useState('');
+    const { usuario, logout } = useAuth();
 
     useEffect(() => {
         fetch('https://tp-dsw-backend-yjx3.onrender.com/api/eventos/clases')
@@ -51,13 +53,9 @@ function Header({ onCategoryChange, onSearch }: HeaderProps) {
     }
 
     const cerrarSesion = () => {
-        localStorage.removeItem('token')
-        localStorage.removeItem('usuario')
+        logout()
         window.location.href = '/'
     }
-
-    const usuarioStorage = localStorage.getItem('usuario')
-    const usuario: Usuario | null = usuarioStorage ? JSON.parse(usuarioStorage) : null
 
     return (
         <>

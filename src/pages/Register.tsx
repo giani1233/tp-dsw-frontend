@@ -1,18 +1,18 @@
 import './register.css'
 import Header from "../components/Header"
 import Footer from "../components/Footer"
+import { useState } from 'react'
 import { useForm, useWatch} from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
 function Register() {
-
     const navigate = useNavigate()
-
+    const [enviando, setEnviando] = useState(false);
+    const [modal, setModal] = useState<{ mensaje: string, tipo: 'exito' | 'error' } | null>(null)
     const { register, handleSubmit, watch, formState: { errors }, control } = useForm();
 
     const onSubmit = async (data: any) => {
-        console.log(data) 
-
+        setEnviando(true);
         try {
             const userData = {
                 dni: data.dni,
@@ -40,29 +40,31 @@ function Register() {
                 throw new Error(result.message || 'Error en el registro')
             }
 
-            alert('✅ ¡Registro exitoso!')
-
-            navigate('/login', { 
-                state: { registroExitoso: true },
-                replace: true 
-            });
+            setModal({ mensaje: 'Registro exitoso! Redirigiendo al login...', tipo: 'exito' })
+            setTimeout(() => {
+                setModal(null)
+                navigate('/login', { state: { registroExitoso: true }, replace: true });
+            }, 2000)
 
         } catch (error: any) {
             const errorMessage = error.message.toLowerCase();
             if (errorMessage.includes('usuario.usuario_dni_unique')) {
-                alert('❌ El DNI ya está registrado. Por favor, utiliza otro documento.');
+                setModal({ mensaje: 'El DNI ya está registrado. Por favor, utilizá otro documento.', tipo: 'error' })
             } else if (errorMessage.includes('usuario.usuario_email_unique')) {
-                alert('❌ Ya existe una cuenta con ese email.');
+                setModal({ mensaje: 'Ya existe una cuenta con ese email.', tipo: 'error' })
             } else if (errorMessage.includes('usuario.usuario_telefono_unique')) {
-                alert('❌ El teléfono ya está registrado. Por favor, utiliza otro número.');
+                setModal({ mensaje: 'El teléfono ya está registrado. Por favor, utilizá otro número.', tipo: 'error' })
             } else {
-                alert(`❌ Error: ${error.message}`);
+                setModal({ mensaje: `Error: ${error.message}`, tipo: 'error' })
             }
+        } finally {
+            setEnviando(false);
         }
     }
 
     const watchPassword = watch("contraseña")
     const watchTipo = useWatch({control , name: "tipo", defaultValue: ""})
+
     return (
         <>
             <Header onCategoryChange={() => {}} onSearch={() => {}} />
@@ -166,15 +168,28 @@ function Register() {
                             />
                             {errors.confirmarContraseña && typeof errors.confirmarContraseña.message === "string" &&<span className="error-message">{errors.confirmarContraseña.message}</span>}
                         </div>
-                        
-                        <button type="submit" className="btn-register">Registrar</button>
-
+                        <button type="submit" className="btn-register" disabled={enviando}>
+                            {enviando ? 'Registrando...' : 'Registrar'}
+                        </button>
                         <div className="login-link">
                             <p>Ya posee una cuenta? <a href="/login">Iniciar sesión</a></p>
                         </div>
                     </form>
                 </div>
             </div>
+
+            {modal && (
+                <div className="overlay">
+                    <div className="modal-feedback">
+                        <p className={modal.tipo === 'exito' ? 'modal-exito' : 'modal-error'}>
+                            {modal.tipo === 'exito' ? '✅' : '❌'} {modal.mensaje}
+                        </p>
+                        {modal.tipo === 'error' && (
+                            <button onClick={() => setModal(null)}>Cerrar</button>
+                        )}
+                    </div>
+                </div>
+            )}
 
             <Footer />
         </>

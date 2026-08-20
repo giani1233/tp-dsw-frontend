@@ -1,69 +1,87 @@
 import './gestionCategorias.css'
 import HeaderAdministrador from '../components/HeaderAdministrador'
-import { useState, useEffect, use } from 'react'
+import { useState, useEffect } from 'react'
 import { ClaseEvento } from '../types/claseEvento';
 import CategoryCard from '../components/CategoryCard';
 import AddCategoryCard from '../components/AddCategoryCard';
 import Footer from '../components/Footer';
+import { fetchConToken } from '../utils/fetchConToken';
 
 function GestionCategorias() {
     const [categorias, setCategorias] = useState<ClaseEvento[]>([]);
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState<ClaseEvento | null>(null);
     const [mostrarAgregar, setMostrarAgregar] = useState(false);
+    const [cargando, setCargando] = useState(true);
+    const [procesando, setProcesando] = useState<number | null>(null);
+    const [modal, setModal] = useState<{mensaje: string, tipo: 'exito' | 'error'} | null>(null);
+    const [confirmacion, setConfirmacion] = useState<{mensaje: string, onConfirmar: () => void} | null>(null);
+    const [errorCarga, setErrorCarga] = useState<string | null>(null);
 
     const fetchCategorias = () => {
-        fetch('https://tp-dsw-backend-yjx3.onrender.com/api/eventos/clases')
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-                setCategorias(data.data);
+        setErrorCarga(null);
+        return fetchConToken('https://tp-dsw-backend-yjx3.onrender.com/api/eventos/clases')
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Error al cargar las categorías');
+                }
+                return res.json();
             })
-            .catch((error) => console.error('Error al cargar las categorías:', error));
+            .then((data) => { setCategorias(data.data)})
+            .catch((err) => {
+                console.error(err)
+                setErrorCarga('Error al cargar las categorías');
+            });
     }
 
     useEffect(() => {
-        fetchCategorias();
+        setCargando(true);
+        fetchCategorias().finally(() => setCargando(false));
     }, []);
 
     const handleEliminar = (categoria: ClaseEvento) => {
-            fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/eventos/clases/${categoria.id}`, {
-                method: 'DELETE',
-            })
+        setConfirmacion({
+            mensaje: `Está seguro de que desea eliminar la categoría "${categoria.nombre}"?`,
+            onConfirmar: () => {
+                setConfirmacion(null);
+                setProcesando(categoria.id);
+                fetchConToken(`https://tp-dsw-backend-yjx3.onrender.com/api/eventos/clases/${categoria.id}`, {
+                    method: 'DELETE',
+                })
                 .then((res) => {
                     if (res.ok) {
-                        console.log("Categoría eliminada con éxito");
                         fetchCategorias();
+                        setModal({mensaje: "Categoría eliminada correctamente", tipo: 'exito'});
                     } else {
-                        console.error("Error al eliminar la categoría");
+                        setModal({mensaje: "Error al eliminar la categoría", tipo: 'error'});
                     }
                 })
-                .catch((err) => console.error("Error al eliminar la categoría:", err));
-        };
+                .catch(() => setModal({mensaje: "Error al eliminar la categoría", tipo: 'error'}))
+                .finally(() => setProcesando(null));
+            }
+        })
+    }
 
     const handleFiltro = (filtro: string) => {
-        if (filtro.trim() === '') {
-            fetchCategorias();
-        } else {
-            fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/eventos/clases/filtro?busqueda=${encodeURIComponent(filtro)}`)
-                .then((res) => res.json())
-                .then((resData) => {
-                    setCategorias(resData.data);
+        const url = filtro.trim() === ''
+        ? 'https://tp-dsw-backend-yjx3.onrender.com/api/eventos/clases'
+        : `https://tp-dsw-backend-yjx3.onrender.com/api/eventos/clases/filtro?busqueda=${encodeURIComponent(filtro)}`;
+        setCargando(true);
+        setErrorCarga(null);
+        fetchConToken(url)
+            .then(res => {
+                    if (!res.ok) throw new Error('Error al filtrar')
+                    return res.json()
                 })
-                .catch((err) => console.error("Error al filtrar las categorías:", err));
-        }
+            .then(resData => setCategorias(resData.data))
+            .catch(err => {
+                console.error(err)
+                setErrorCarga('Error al filtrar las categorías')
+            })
+            .finally(() => setCargando(false));
     };
 
-    const handleModificar = (categoria: ClaseEvento) => {
-        setCategoriaSeleccionada(categoria);
-    }
-
-    const handleCerrar = () => {
-        setCategoriaSeleccionada(null)
-        fetchCategorias()
-    }
-
     const handleGuardar = (id:number, nuevoNombre:string) => {
-        fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/eventos/clases/${id}`, {
+        fetchConToken(`https://tp-dsw-backend-yjx3.onrender.com/api/eventos/clases/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -71,16 +89,16 @@ function GestionCategorias() {
             body: JSON.stringify({ nombre: nuevoNombre }),
         })
             .then((res) => res.json())
-            .then((resData) => {
-                console.log("Categoría modificada con éxito");
+            .then(() => {
                 fetchCategorias();
-                handleCerrar();
+                setCategoriaSeleccionada(null);
+                setModal({mensaje: "Categoría modificada correctamente", tipo: 'exito'});
             })
-            .catch((err) => console.error("Error al modificar la categoría:", err));
+            .catch(() => setModal({mensaje: "Error al modificar la categoría", tipo: 'error'}));
     }
 
     const handleAgregar = (nuevoNombre: string) => {
-        fetch('https://tp-dsw-backend-yjx3.onrender.com/api/eventos/clases', {
+        fetchConToken('https://tp-dsw-backend-yjx3.onrender.com/api/eventos/clases', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nombre: nuevoNombre }),
@@ -89,8 +107,9 @@ function GestionCategorias() {
         .then(() => {
             fetchCategorias()
             setMostrarAgregar(false)
+            setModal({mensaje: "Categoría agregada correctamente", tipo: 'exito'});
         })
-        .catch((err) => console.error("Error al agregar la categoría:", err));
+        .catch(() => setModal({mensaje: "Error al agregar la categoría", tipo: 'error'}));
     }
 
     return (
@@ -110,36 +129,42 @@ function GestionCategorias() {
                 >
                     Añadir Categoría
                 </button>
-                <div className="contenedor-tabla-categorias">
-                    <table className="tabla-categorias">
-                        <thead>
-                            <tr>
-                                <th>Categoría</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                {cargando ? (
+                    <p className="loading-msg">Cargando categorías...</p>
+                ) : errorCarga? (
+                    <p style={{ color: 'red', textAlign: 'center' }}>{errorCarga}.</p>
+                ) : (
+                    <div className="contenedor-tabla-categorias">
+                        <table className="tabla-categorias">
+                            <thead>
+                                <tr>
+                                    <th>Categoría</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
                             {categorias.map((categoria) => (
                                 <tr key={categoria.id}>
                                     <td>{categoria.nombre}</td>
                                     <td>
-                                        <button onClick={() => handleEliminar(categoria)} id="eliminar-categoria">Eliminar</button>
+                                        <button onClick={() => handleEliminar(categoria)} id="eliminar-categoria" disabled={procesando === categoria.id}>{procesando === categoria.id ? "Eliminando..." : "Eliminar"}</button>
                                     </td>
                                     <td>
-                                        <button onClick={() => handleModificar(categoria)} id="modificar-categoria">Modificar</button>
+                                        <button onClick={() => setCategoriaSeleccionada(categoria)} id="modificar-categoria" disabled={procesando === categoria.id}>Modificar</button>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
+                )}
             </div>
             {categoriaSeleccionada && (
                 <div className="overlay">
                     <CategoryCard
                         categoria={categoriaSeleccionada}
-                        onClose={handleCerrar}
+                        onClose={() => { setCategoriaSeleccionada(null); fetchCategorias(); }}
                         onGuardar={handleGuardar}
                     />
                 </div>
@@ -152,6 +177,27 @@ function GestionCategorias() {
                     />
                 </div>
             )}
+            {modal && (
+                <div className="overlay">
+                    <div className="modal-feedback">
+                        <p className={modal.tipo === 'exito' ? 'modal-exito' : 'modal-error'}>
+                            {modal.tipo === 'exito' ? '✔️' : '❌'} {modal.mensaje}
+                        </p>
+                        <button onClick={() => setModal(null)}>Cerrar</button>
+                    </div>
+                </div>
+            )}
+            {confirmacion && (
+                <div className="overlay">
+                    <div className="modal-feedback">
+                        <p>{confirmacion.mensaje}</p>
+                        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                            <button onClick={confirmacion.onConfirmar} id="aceptar-evento">Confirmar</button>
+                            <button onClick={() => setConfirmacion(null)} id="rechazar-evento">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            )}  
             <Footer />
         </>
     );

@@ -1,5 +1,6 @@
 import { JSX } from 'react';
 import { Navigate } from 'react-router-dom'
+import { useAuth } from '../AuthContext';
 
 interface ProtectedRouteProps {
     children: JSX.Element;
@@ -7,15 +8,13 @@ interface ProtectedRouteProps {
 }
 
 function RutaProtegida({ children, tiposPermitidos }: ProtectedRouteProps) {
-    const usuario = localStorage.getItem('usuario')
+    const { usuario } = useAuth();
     
     if (!usuario) {
         return <Navigate to="/login" />
     }
 
-    const tipo = JSON.parse(usuario).tipo
-
-    if(!tiposPermitidos.includes(tipo)) {
+    if(!tiposPermitidos.includes(usuario.tipo)) {
         return <Navigate to="/login" />
     }
 

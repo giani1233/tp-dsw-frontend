@@ -54,6 +54,7 @@ function EventsMap() {
     const [ubicaciones, setUbicaciones] = useState<UbicacionMapa[]>([])
     const [cargando, setCargando] = useState(true)
     const [direccionSeleccionada, setDireccionSeleccionada] = useState<UbicacionMapa | null>(null)
+    const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
         const fecthMapa = async () => {
@@ -65,7 +66,8 @@ function EventsMap() {
                 const data = await res.json()
                 setUbicaciones(data.data)
             } catch (err) {
-                console.error('Error cargando mapa', err)
+                    console.error('Error cargando mapa', err)
+                    setError('Error cargando el mapa de eventos')
             } finally {
                 setCargando(false)
             }
@@ -74,6 +76,7 @@ function EventsMap() {
     }, [])
 
     if (cargando) return <p>Cargando mapa...</p>;
+    if (error) return <p style={{ color: 'red', textAlign: 'center' }}>❌ {error}</p>
 
     return (
             <>

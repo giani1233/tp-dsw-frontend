@@ -4,6 +4,7 @@ import Footer from '../components/Footer'
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import EventsMap from '../components/EventsMap';
+import { useAuth } from '../AuthContext' 
 
 function capitalizar(texto: string | undefined) {
     if (!texto) return '';
@@ -39,28 +40,29 @@ function Home() {
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('')
     const [busqueda, setBusqueda] = useState('')
     const [errorCompra, setErrorCompra] = useState<{[id: number]: string}>({})
+    const { usuario } = useAuth() 
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        const usuario = localStorage.getItem('usuario')
         if (usuario) {
-            const tipo = JSON.parse(usuario).tipo
-            if (tipo === 'administrador') {
+            if (usuario.tipo === 'administrador') {
                 navigate('/administrador')
-            } else if (tipo === 'organizador') {
+            } else if (usuario.tipo === 'organizador') {
                 navigate('/misEventos')
             } else {
                 navigate('/')
             }
         }
-    }, [])
+    }, [usuario])
 
     useEffect(() => {
     const fetchEventos = async () => {
             try {
                 const response = await fetch('https://tp-dsw-backend-yjx3.onrender.com/api/eventos/aprobados')
                 if (!response.ok) throw new Error('Error al cargar eventos')
+                const contentType = response.headers.get('Content-Type')
+                if (!contentType?.includes('application/json')) throw new Error('Error de servidor')
                 const data = await response.json()
                 console.log(data)
                 setEventos(Array.isArray(data) ? data : data.data)
@@ -74,6 +76,8 @@ function Home() {
         try {
             const response = await fetch('https://tp-dsw-backend-yjx3.onrender.com/api/eventos/destacados')
             if (!response.ok) throw new Error('Error al cargar eventos destacados')
+            const contentType = response.headers.get('Content-Type')
+            if (!contentType?.includes('application/json')) throw new Error('Error de servidor')
             const data = await response.json()
             console.log(data)
             setEventosDestacados(Array.isArray(data) ? data : data.data)
@@ -109,7 +113,6 @@ function Home() {
 
     const handleCompra = async (evento: any) => {
         setErrorCompra(prev => ({ ...prev, [evento.id]: '' }))
-        const usuario = JSON.parse(localStorage.getItem('usuario') || 'null');
         if(!usuario) {
             window.location.href = '/login';
             return;

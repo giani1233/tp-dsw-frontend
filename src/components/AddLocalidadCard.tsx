@@ -12,12 +12,23 @@ function AddLocalidadCard({ onClose, onGuardar }: AddLocalidadCardProps) {
     const [nuevoCodigoPostal, setNuevoCodigo] = useState('')
     const [provinciaId, setProvinciaId] = useState('')
     const [provincias, setProvincias] = useState<Provincia[]>([])
+    const [cargandoProvincias, setCargandoProvincias] = useState(true)
+    const [errorProvincias, setErrorProvincias] = useState<string | null>(null)
 
     useEffect(() => {
         fetch('https://tp-dsw-backend-yjx3.onrender.com/api/provincias')
-            .then((res) => res.json())
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Error cargando las provincias');
+                }
+                return res.json();
+            })
             .then((data) => setProvincias(data.data))
-            .catch((err) => console.error('Error fetching provincias:', err));
+            .catch((err) => {
+                console.error(err)
+                setErrorProvincias('Error cargando las provincias');
+            })
+            .finally(() => setCargandoProvincias(false));
     }, [])
 
     const handleEnviar = (e: React.FormEvent) => {
@@ -46,18 +57,24 @@ function AddLocalidadCard({ onClose, onGuardar }: AddLocalidadCardProps) {
                     required 
                 />
                 <label>Provincia</label>
-                <select 
-                    value={provinciaId}
-                    onChange={(e) => setProvinciaId(e.target.value)}
-                    required
-                >
-                    <option value="">Seleccione una provincia</option>
-                    {provincias.map((provincia) => (
-                        <option key={provincia.id} value={provincia.id}>
-                            {provincia.nombre}
-                        </option>
-                    ))}
-                </select>
+                {cargandoProvincias ? (
+                    <p className='map-cargando'>Cargando provincias...</p>
+                ) : errorProvincias ? (
+                    <p style={{ color: 'red', fontSize: '0.85rem' }}>❌ {errorProvincias}</p>
+                ) : (
+                    <select
+                        value={provinciaId}
+                        onChange={(e) => setProvinciaId(e.target.value)}
+                        required
+                    >
+                        <option value="">Seleccione una provincia</option>
+                        {provincias.map((provincia) => (
+                            <option key={provincia.id} value={provincia.id}>
+                                {provincia.nombre}
+                            </option>
+                        ))}
+                    </select>
+                )}
                 <div className='card-add-categoria-botones'>
                     <button type="submit" id="boton-guardar-categoria">Guardar</button>
                     <button type="button" onClick={onClose} id="boton-cerrar-categoria">Cerrar</button>
