@@ -208,7 +208,7 @@ function GestionDirecciones() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ nombre: nuevoNombre, codigo: nuevoCodigo }),
+            body: JSON.stringify({ nombre: nuevoNombre, codigo: Number(nuevoCodigo) }),
         })
             .then(() => {
                 fetchProvincias();
