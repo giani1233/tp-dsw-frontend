@@ -254,7 +254,7 @@ function GestionDirecciones() {
         fetchConToken('https://tp-dsw-backend-yjx3.onrender.com/api/provincias', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nombre: nuevoNombre, codigo: nuevoCodigo }),
+            body: JSON.stringify({ nombre: nuevoNombre, codigo: String(nuevoCodigo) }),
         })
         .then(() => {
             fetchProvincias()
