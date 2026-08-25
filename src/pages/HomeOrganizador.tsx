@@ -88,23 +88,21 @@ function HomeOrganizador() {
     const onSubmit = async (data: any) => {
         setEnviando(true)
         try {
-            const fechaInicio = data.fecha ? new Date(data.fecha) : null;
-            const horaInicio = data.horaInicio ? new Date(`1970-01-01T${data.horaInicio}:00`) : null;
-            const horaFin = data.horaFin ? new Date(`1970-01-01T${data.horaFin}:00`) : null;
+            const fechaInicio = data.fecha ? new Date(data.fecha) : undefined;
+            const horaInicio = data.horaInicio ? new Date(`1970-01-01T${data.horaInicio}:00`) : undefined;
+            const horaFin = data.horaFin ? new Date(`1970-01-01T${data.horaFin}:00`) : undefined;
             const eventoParaCrear = {
-                ...data,
-                claseEvento: data.categoria,
-                direccion: data.direccion,
+                nombre: data.nombre,
+                descripcion: data.descripcion,
                 precioEntrada: Number(data.precioEntrada),
                 cantidadCupos: Number(data.cantidadCupos),
-                cuposDisponibles: Number(data.cantidadCupos),
-                edadMinima: Number(data.edadMinima),
+                edadMinima: data.edadMinima !== "" && data.edadMinima !== undefined ? Number(data.edadMinima) : undefined,
+                claseEvento: Number(data.categoria), 
+                direccion: Number(data.direccion),   
+                organizador: usuario?.id ? Number(usuario.id) : undefined,
                 fechaInicio,
                 horaInicio,
-                horaFin,
-                estado: "pendiente",
-                destacado: false,
-                organizador: usuario ? usuario.id : null
+                ...(horaFin && { horaFin }),
             };
             const respuestaC = await fetchConToken(`https://tp-dsw-backend-yjx3.onrender.com/api/eventos`, {
                 method: 'POST',
