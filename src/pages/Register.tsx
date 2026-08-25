@@ -22,8 +22,8 @@ function Register() {
                 telefono: data.telefono,
                 tipo: data.tipo,
                 contrasena: data.contraseña,
-                fechaNacimiento: data.fechaNacimiento || null,
-                empresa: data.empresa || null
+                fechaNacimiento: data.fechaNacimiento ? new Date(`${data.fechaNacimiento}T00:00:00`) : undefined,
+                empresa: data.empresa ? data.empresa : undefined
             }
 
             const response = await fetch(`https://tp-dsw-backend-yjx3.onrender.com/api/usuarios/${data.tipo}`, {
