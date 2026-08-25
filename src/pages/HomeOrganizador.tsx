@@ -88,7 +88,7 @@ function HomeOrganizador() {
     const onSubmit = async (data: any) => {
         setEnviando(true)
         try {
-            const fechaInicio = data.fecha ? new Date(data.fecha) : undefined;
+            const fechaInicio = data.fecha ? new Date(`${data.fecha}T00:00:00`) : undefined;
             const horaInicio = data.horaInicio ? new Date(`1970-01-01T${data.horaInicio}:00`) : undefined;
             const horaFin = data.horaFin ? new Date(`1970-01-01T${data.horaFin}:00`) : undefined;
             const eventoParaCrear = {
