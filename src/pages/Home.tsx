@@ -122,7 +122,7 @@ function Home() {
             const response = await fetchConToken('https://tp-dsw-backend-yjx3.onrender.com/api/pagos/crear-preferencia', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ titulo: evento.nombre, monto: evento.precioEntrada, cantidad: 1, idEvento: evento.id, idUsuario: usuario.id })
+                body: JSON.stringify({ titulo: evento.nombre, monto: evento.precioEntrada, cantidad: 1, idEvento: evento.id })
             })
 
             if (!response.ok) {
