@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import EventsMap from '../components/EventsMap';
 import { useAuth } from '../AuthContext' 
+import { fetchConToken } from '../utils/fetchConToken';
 
 function capitalizar(texto: string | undefined) {
     if (!texto) return '';
@@ -118,7 +119,7 @@ function Home() {
             return;
         }
         try {
-            const response = await fetch('https://tp-dsw-backend-yjx3.onrender.com/api/pagos/crear-preferencia', {
+            const response = await fetchConToken('https://tp-dsw-backend-yjx3.onrender.com/api/pagos/crear-preferencia', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ titulo: evento.nombre, monto: evento.precioEntrada, cantidad: 1, idEvento: evento.id, idUsuario: usuario.id })
