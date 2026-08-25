@@ -208,7 +208,7 @@ function GestionDirecciones() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ nombre: nuevoNombre, codigo: Number(nuevoCodigo) }),
+            body: JSON.stringify({ nombre: nuevoNombre, codigo: nuevoCodigo }),
         })
             .then(() => {
                 fetchProvincias();
@@ -268,7 +268,7 @@ function GestionDirecciones() {
         fetchConToken('https://tp-dsw-backend-yjx3.onrender.com/api/localidades', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nombre: nuevoNombre, codigoPostal: String(nuevoCodigoPostal), provincia: provinciaId }),
+            body: JSON.stringify({ nombre: nuevoNombre, codigoPostal: nuevoCodigoPostal, provincia: provinciaId }),
         })
         .then((res) => res.json())
         .then(() => {
